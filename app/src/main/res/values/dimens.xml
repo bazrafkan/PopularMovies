@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="filter_layout_height">40dp</dimen>
+    <dimen name="filter_title_layout_marginLeft">10dp</dimen>
+    <dimen name="filter_title_layout_marginTop">9dp</dimen>
+    <dimen name="filter_title_textSize">16sp</dimen>
+    <dimen name="filter_title_layout_marginStart">10dp</dimen>
+    <dimen name="filter_value_layout_marginRight">10dp</dimen>
+    <dimen name="filter_value_layout_marginEnd">10dp</dimen>
+</resources>
