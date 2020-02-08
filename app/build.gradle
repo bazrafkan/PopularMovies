@@ -1,9 +1,14 @@
 apply plugin: 'com.android.application'
 
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
+        buildConfigField("String", "tmdb_api_key", apikeyProperties['tmdb_api_key'])
         applicationId "com.example.popularmovies"
         minSdkVersion 15
         targetSdkVersion 29
@@ -26,4 +31,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }
