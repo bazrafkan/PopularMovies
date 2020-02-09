@@ -6,16 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.popularmovies.adapters.ListMoviesAdapter;
 import com.example.popularmovies.models.ListMovies;
@@ -31,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
     private ProgressBar mLoadingProgressBar;
     private RecyclerView mListMovies;
     private ListMoviesAdapter listMoviesAdapter;
+    private List<ListMovies> listMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
         protected void onPostExecute(List<ListMovies> listMovies) {
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
             if (listMovies != null && listMovies.size() > 0) {
+                MainActivity.this.listMovies = listMovies;
                 GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, getSpanCount(100));
                 mListMovies.setLayoutManager(layoutManager);
                 mListMovies.setHasFixedSize(true);
@@ -114,11 +114,10 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
     }
 
     @Override
-    public void onListItemClick(int id) {
-        //TODO navigate to detal activity
-        String toastMessage = "Item #" + id + " clicked.";
-        Toast mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
-        mToast.show();
+    public void onListItemClick(int position) {
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT, MainActivity.this.listMovies.get(position).getId());
+        startActivity(intent);
     }
 
     enum Sorted {
