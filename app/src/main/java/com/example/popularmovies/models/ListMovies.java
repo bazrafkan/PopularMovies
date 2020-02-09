@@ -1,7 +1,13 @@
 package com.example.popularmovies.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ListMovies {
+
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("poster_path")
     private String posterPath;
 
     public ListMovies() {

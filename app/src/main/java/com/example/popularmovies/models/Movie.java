@@ -1,23 +1,36 @@
 package com.example.popularmovies.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Movie {
 
+    @SerializedName("title")
     private String title;
+
+    @SerializedName("poster_path")
     private String posterPath;
-    private String description;
+
+    @SerializedName("overview")
+    private String overview;
+
+    @SerializedName("release_date")
     private String releaseDate;
+
+    @SerializedName("vote_average")
     private int voteAverage;
-    private List<String> genres = null;
+
+    @SerializedName("genres")
+    private List<Genres> genres = null;
 
     public Movie() {
     }
 
-    public Movie(String title, String posterPath, String description, String releaseDate, int voteAverage, List<String> genres) {
+    public Movie(String title, String posterPath, String overview, String releaseDate, int voteAverage, List<Genres> genres) {
         this.title = title;
         this.posterPath = posterPath;
-        this.description = description;
+        this.overview = overview;
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
         this.genres = genres;
@@ -31,8 +44,8 @@ public class Movie {
         return posterPath;
     }
 
-    public String getDescription() {
-        return description;
+    public String getOverview() {
+        return overview;
     }
 
     public String getReleaseDate() {
@@ -43,7 +56,7 @@ public class Movie {
         return voteAverage;
     }
 
-    public List<String> getGenres() {
+    public List<Genres> getGenres() {
         return genres;
     }
 
@@ -55,8 +68,8 @@ public class Movie {
         this.posterPath = posterPath;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
     public void setReleaseDate(String releaseDate) {
@@ -67,9 +80,10 @@ public class Movie {
         this.voteAverage = voteAverage;
     }
 
-    public void setGenres(List<String> genres) {
+    public void setGenres(List<Genres> genres) {
         this.genres = genres;
     }
 
 
 }
+
