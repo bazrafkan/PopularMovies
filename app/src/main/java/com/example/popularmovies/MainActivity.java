@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
         protected void onPostExecute(List<ListMovies> listMovies) {
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
             if (listMovies != null && listMovies.size() > 0) {
-                GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 4);
+                GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, getSpanCount(100));
                 mListMovies.setLayoutManager(layoutManager);
                 mListMovies.setHasFixedSize(true);
                 listMoviesAdapter = new ListMoviesAdapter(listMovies, MainActivity.this);
@@ -122,5 +124,11 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
     enum Sorted {
         Popular,
         TopRated
+    }
+
+    private int getSpanCount(int widthDP) {
+        final float density = getResources().getDisplayMetrics().density;
+        int spanCount = (int) Math.floor(mListMovies.getWidth() / (widthDP * density));
+        return spanCount;
     }
 }
