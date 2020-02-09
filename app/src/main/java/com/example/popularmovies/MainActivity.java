@@ -3,6 +3,8 @@ package com.example.popularmovies;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.popularmovies.adapters.ListMoviesAdapter;
 import com.example.popularmovies.models.ListMovies;
 import com.example.popularmovies.models.PopularMovies;
 import com.example.popularmovies.models.TopRatedMovies;
@@ -19,10 +23,12 @@ import com.google.android.material.chip.Chip;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListMoviesAdapter.ListItemClickListener {
     private TextView mEmptyMoviesTextView;
     private Chip mFilterChip;
     private ProgressBar mLoadingProgressBar;
+    private RecyclerView mListMovies;
+    private ListMoviesAdapter listMoviesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         mEmptyMoviesTextView = findViewById(R.id.tv_empty_message);
         mFilterChip = findViewById(R.id.cp_filter);
         mLoadingProgressBar = findViewById(R.id.pb_loading_indicator);
-
+        mListMovies = findViewById(R.id.rv_list_movies);
         makeListMovies(Sorted.Popular);
 
 
@@ -87,7 +93,11 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(List<ListMovies> listMovies) {
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
             if (listMovies != null && listMovies.size() > 0) {
-                //TODO show list of movies
+                GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 4);
+                mListMovies.setLayoutManager(layoutManager);
+                mListMovies.setHasFixedSize(true);
+                listMoviesAdapter = new ListMoviesAdapter(listMovies, MainActivity.this);
+                mListMovies.setAdapter(listMoviesAdapter);
             } else {
                 mEmptyMoviesTextView.setVisibility(View.VISIBLE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
@@ -99,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onListItemClick(int id) {
+        //TODO navigate to detal activity
+        String toastMessage = "Item #" + id + " clicked.";
+        Toast mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 
     enum Sorted {

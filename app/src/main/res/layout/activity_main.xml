@@ -50,6 +50,11 @@
             android:layout_marginBottom="2dp"
             android:background="@android:color/white" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list_movies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 
     </LinearLayout>
 
