@@ -7,7 +7,7 @@ import java.util.List;
 public class Movie {
     private final String IMAGE_PATH = "https://image.tmdb.org/t/p/w185";
 
-    @SerializedName("title")
+    @SerializedName("original_title")
     private String title;
 
     @SerializedName("poster_path")
