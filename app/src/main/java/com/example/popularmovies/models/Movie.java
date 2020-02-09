@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Movie {
-    private final String IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
+    private final String IMAGE_PATH = "https://image.tmdb.org/t/p/w185";
 
     @SerializedName("title")
     private String title;
