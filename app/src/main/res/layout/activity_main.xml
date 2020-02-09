@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginRight="@dimen/filter_value_layout_marginRight"
-            android:text="@string/popular"
+            android:text="@string/most_popular"
             android:textColor="@android:color/white"
             android:visibility="visible"
             app:chipBackgroundColor="@color/colorAccent"

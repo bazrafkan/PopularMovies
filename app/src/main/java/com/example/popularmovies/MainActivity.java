@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter_by_popular:
-                mFilterChip.setText("Popular");
+                mFilterChip.setText(R.string.most_popular);
                 //TODO call sort by popular
                 if (toast != null) {
                     toast.cancel();
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
                 return true;
             case R.id.action_filter_by_rate:
-                mFilterChip.setText("Rate");
+                mFilterChip.setText(R.string.top_rate);
                 //TODO call sort by rate
                 if (toast != null) {
                     toast.cancel();
