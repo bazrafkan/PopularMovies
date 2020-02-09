@@ -3,4 +3,5 @@
     <string name="most_popular">Most popular</string>
     <string name="top_rate">Top rate</string>
     <string name="sorted_by">Sorted By:</string>
+    <string name="no_movies_available">No movies available</string>
 </resources>

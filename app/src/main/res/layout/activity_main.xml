@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,46 +7,67 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/filter_layout_height"
-        android:background="@color/colorPrimary400"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/filter_title_layout_marginLeft"
-            android:layout_marginTop="@dimen/filter_title_layout_marginTop"
-            android:text="@string/sorted_by"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/filter_title_textSize"
-            android:layout_marginStart="@dimen/filter_title_layout_marginStart" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_layout_height"
+            android:background="@android:color/black"
+            android:orientation="horizontal">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/cp_filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginRight="@dimen/filter_value_layout_marginRight"
-            android:text="@string/most_popular"
-            android:textColor="@android:color/white"
-            android:visibility="visible"
-            app:chipBackgroundColor="@color/colorAccent"
-            android:layout_marginEnd="@dimen/filter_value_layout_marginEnd" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/filter_title_layout_marginStart"
+                android:layout_marginLeft="@dimen/filter_title_layout_marginLeft"
+                android:layout_marginTop="@dimen/filter_title_layout_marginTop"
+                android:text="@string/sorted_by"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/filter_title_textSize" />
 
-    </FrameLayout>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/filter_value_layout_marginEnd"
+                android:layout_marginRight="@dimen/filter_value_layout_marginRight"
+                android:text="@string/most_popular"
+                android:textColor="@android:color/white"
+                android:visibility="visible"
+                app:chipBackgroundColor="@color/colorAccent" />
 
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/white" />
+
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_loading_indicator"
+        android:layout_width="@dimen/loading_layout_size"
+        android:layout_height="@dimen/loading_layout_size"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
 
     <TextView
-        android:id="@+id/tv_display"
+        android:id="@+id/tv_empty_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center"
+        android:text="@string/no_movies_available"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/filter_title_textSize"
+        android:visibility="invisible" />
 
-
-</LinearLayout>
+</FrameLayout>

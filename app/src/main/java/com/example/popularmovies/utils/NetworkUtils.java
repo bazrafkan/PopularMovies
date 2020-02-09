@@ -2,8 +2,6 @@ package com.example.popularmovies.utils;
 
 import android.net.Uri;
 
-import com.example.popularmovies.BuildConfig;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;

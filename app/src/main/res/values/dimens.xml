@@ -7,4 +7,5 @@
     <dimen name="filter_title_layout_marginStart">10dp</dimen>
     <dimen name="filter_value_layout_marginRight">10dp</dimen>
     <dimen name="filter_value_layout_marginEnd">10dp</dimen>
+    <dimen name="loading_layout_size">50dp</dimen>
 </resources>
