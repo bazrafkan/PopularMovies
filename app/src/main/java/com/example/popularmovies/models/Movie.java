@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Movie {
-    private final String IMAGE_PATH = "https://image.tmdb.org/t/p/w185";
+    private final String IMAGE_PATH = "https://image.tmdb.org/t/p/";
+    private final String IMAGE_SIZE = "w185";
 
     @SerializedName("original_title")
     private String title;
@@ -42,7 +43,7 @@ public class Movie {
     }
 
     public String getPosterPath() {
-        return IMAGE_PATH + posterPath;
+        return IMAGE_PATH + IMAGE_SIZE + posterPath;
     }
 
     public String getOverview() {

@@ -3,7 +3,8 @@ package com.example.popularmovies.models;
 import com.google.gson.annotations.SerializedName;
 
 public class ListMovies {
-    private final String IMAGE_PATH = "https://image.tmdb.org/t/p/w185";
+    private final String IMAGE_PATH = "https://image.tmdb.org/t/p/";
+    private final String IMAGE_SIZE = "w185";
 
     @SerializedName("id")
     private int id;
@@ -24,7 +25,7 @@ public class ListMovies {
     }
 
     public String getPosterPath() {
-        return IMAGE_PATH + posterPath;
+        return IMAGE_PATH + IMAGE_SIZE + posterPath;
     }
 
     public void setId(int id) {
