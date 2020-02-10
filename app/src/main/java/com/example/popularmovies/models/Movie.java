@@ -20,7 +20,7 @@ public class Movie {
     private String releaseDate;
 
     @SerializedName("vote_average")
-    private int voteAverage;
+    private float voteAverage;
 
     @SerializedName("genres")
     private List<Genres> genres = null;
@@ -28,7 +28,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String title, String posterPath, String overview, String releaseDate, int voteAverage, List<Genres> genres) {
+    public Movie(String title, String posterPath, String overview, String releaseDate, float voteAverage, List<Genres> genres) {
         this.title = title;
         this.posterPath = posterPath;
         this.overview = overview;
@@ -53,7 +53,7 @@ public class Movie {
         return releaseDate;
     }
 
-    public int getVoteAverage() {
+    public float getVoteAverage() {
         return voteAverage;
     }
 
@@ -77,7 +77,7 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
-    public void setVoteAverage(int voteAverage) {
+    public void setVoteAverage(float voteAverage) {
         this.voteAverage = voteAverage;
     }
 

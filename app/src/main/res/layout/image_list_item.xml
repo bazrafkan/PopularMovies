@@ -5,8 +5,9 @@
 
     <ImageView
         android:id="@+id/iv_item_image"
-        android:layout_width="110dp"
-        android:layout_height="160dp"
-        android:layout_gravity="center"/>
+        android:layout_width="@dimen/image_item_layout_width"
+        android:layout_height="@dimen/image_item_layout_height"
+        android:layout_gravity="center"
+        android:contentDescription="@string/poster" />
 
 </FrameLayout>

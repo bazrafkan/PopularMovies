@@ -15,24 +15,22 @@ public class DetailsMovie {
             "https://api.themoviedb.org/3/movie/";
     private final static String PARAM_API_KEY = "api_key";
 
-    Movie movie = null;
-
-    public static Movie getPopularMovies(int id) {
+    public static Movie getDetailsMovie(int id) {
         Map<String, String> params = new HashMap<String, String>();
         try {
             params.put(PARAM_API_KEY, BuildConfig.tmdb_api_key);
             URL url = NetworkUtils.buildUrl(TMDB_URL + id, params);
             String result = NetworkUtils.getResponseFromHttpUrl(url);
-            return parseJSON(result).movie;
+            return parseJSON(result);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private static DetailsMovie parseJSON(String response) {
+    private static Movie parseJSON(String response) {
         Gson gson = new GsonBuilder().create();
-        DetailsMovie movieResponse = gson.fromJson(response, DetailsMovie.class);
+        Movie movieResponse = gson.fromJson(response, Movie.class);
         return movieResponse;
     }
 }

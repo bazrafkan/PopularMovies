@@ -4,4 +4,9 @@
     <string name="top_rate">Top rate</string>
     <string name="sorted_by">Sorted By:</string>
     <string name="no_movies_available">No movies available</string>
+    <string name="poster">Poster</string>
+    <string name="rated">Rated:</string>
+    <string name="_0">0</string>
+    <string name="release_date">Release date:</string>
+    <string name="not_available">Not available</string>
 </resources>
