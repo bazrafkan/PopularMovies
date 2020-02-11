@@ -9,4 +9,7 @@
     <string name="_0">0</string>
     <string name="release_date">Release date:</string>
     <string name="not_available">Not available</string>
+    <string name="error">Error</string>
+    <string name="can_not_find_movies">Can not find movies</string>
+    <string name="can_not_show_details_of_this_movie">Can not show details of this movie</string>
 </resources>

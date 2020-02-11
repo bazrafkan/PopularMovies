@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
     private Chip mFilterChip;
     private ProgressBar mLoadingProgressBar;
     private RecyclerView mListMovies;
-    private ListMoviesAdapter listMoviesAdapter;
     private List<ListMovies> listMovies;
 
     @Override
@@ -98,13 +97,13 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
                 GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, getSpanCount(100));
                 mListMovies.setLayoutManager(layoutManager);
                 mListMovies.setHasFixedSize(true);
-                listMoviesAdapter = new ListMoviesAdapter(listMovies, MainActivity.this);
+                ListMoviesAdapter listMoviesAdapter = new ListMoviesAdapter(listMovies, MainActivity.this);
                 mListMovies.setAdapter(listMoviesAdapter);
             } else {
                 mEmptyMoviesTextView.setVisibility(View.VISIBLE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                        .setMessage("Can not find movies")
-                        .setTitle("Error")
+                        .setMessage(R.string.can_not_find_movies)
+                        .setTitle(R.string.error)
                         .setNegativeButton(android.R.string.no, null);
                 AlertDialog dialog = builder.create();
                 dialog.show();
