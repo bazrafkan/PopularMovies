@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/cp_item_genre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/item_genre_layout_marginLeft"
+        android:layout_marginRight="@dimen/item_genre_layout_marginRight"
+        android:textColor="@android:color/white"
+        app:chipBackgroundColor="@color/colorAccent" />
+
+</LinearLayout>

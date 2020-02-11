@@ -2,8 +2,8 @@ package com.example.popularmovies;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-
+import com.example.popularmovies.adapters.ListChipAdapter;
 import com.example.popularmovies.models.DetailsMovie;
 import com.example.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
@@ -27,6 +27,7 @@ public class DetailActivity extends AppCompatActivity {
     private RatingBar mRatedRatingBar;
     private TextView mReleaseDateTextView;
     private TextView mOverviewTextView;
+    private RecyclerView mGenresList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class DetailActivity extends AppCompatActivity {
         mRatedRatingBar = findViewById(R.id.rb_rated_movie);
         mReleaseDateTextView = findViewById(R.id.tv_release_date_movie);
         mOverviewTextView = findViewById(R.id.tv_overview_movie);
+        mGenresList = findViewById(R.id.rv_genres_movie);
 
         Intent intent = getIntent();
         int id = intent.getIntExtra(Intent.EXTRA_TEXT, 0);
@@ -75,10 +77,16 @@ public class DetailActivity extends AppCompatActivity {
                 mRatedRatingBar.setRating(rated);
                 mReleaseDateTextView.setText(movie.getReleaseDate());
                 mOverviewTextView.setText(movie.getOverview());
+                LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
+                layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                mGenresList.setLayoutManager(layoutManager);
+                mGenresList.setHasFixedSize(true);
+                ListChipAdapter listGenreAdapter = new ListChipAdapter(movie.getGenres());
+                mGenresList.setAdapter(listGenreAdapter);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this)
-                        .setMessage("Can not show details of this movie")
-                        .setTitle("Error")
+                        .setMessage(R.string.can_not_show_details_of_this_movie)
+                        .setTitle(R.string.error)
                         .setNegativeButton(android.R.string.no, null);
                 AlertDialog dialog = builder.create();
                 dialog.show();
