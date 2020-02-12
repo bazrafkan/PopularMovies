@@ -15,11 +15,11 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.popularmovies.adapters.ListChipAdapter;
-import com.example.popularmovies.models.DetailsMovie;
 import com.example.popularmovies.models.Movie;
+import com.example.popularmovies.tasks.MoviesTask;
 import com.squareup.picasso.Picasso;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements MoviesTask.AsyncMoviesTaskResult {
     private ProgressBar mLoadingProgressBar;
     private TextView mTitleTextView;
     private ImageView mPosterImageView;
@@ -28,6 +28,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mReleaseDateTextView;
     private TextView mOverviewTextView;
     private RecyclerView mGenresList;
+    private MoviesTask moviesTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,53 +46,54 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int id = intent.getIntExtra(Intent.EXTRA_TEXT, 0);
         if (id != 0) {
-            new MoviesTask().execute(id);
+            moviesTask = new MoviesTask(this);
+            moviesTask.execute(id);
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        cancelTask();
+        super.onDestroy();
+    }
 
-    public class MoviesTask extends AsyncTask<Integer, Void, Movie> {
+    @Override
+    public void onPreExecute() {
+        mLoadingProgressBar.setVisibility(View.VISIBLE);
+    }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingProgressBar.setVisibility(View.VISIBLE);
+    @Override
+    public void onPostExecute(Movie result) {
+        mLoadingProgressBar.setVisibility(View.INVISIBLE);
+        if (result != null) {
+            Picasso.with(DetailActivity.this)
+                    .load(result.getPosterPath())
+                    .into(mPosterImageView);
+            mTitleTextView.setText(result.getTitle());
+            float rated = result.getVoteAverage();
+            mRatedTextView.setText(String.valueOf(rated));
+            mRatedRatingBar.setRating(rated);
+            mReleaseDateTextView.setText(result.getReleaseDate());
+            mOverviewTextView.setText(result.getOverview());
+            LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
+            layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+            mGenresList.setLayoutManager(layoutManager);
+            mGenresList.setHasFixedSize(true);
+            ListChipAdapter listGenreAdapter = new ListChipAdapter(result.getGenres());
+            mGenresList.setAdapter(listGenreAdapter);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this)
+                    .setMessage(R.string.can_not_show_details_of_this_movie)
+                    .setTitle(R.string.error)
+                    .setNegativeButton(android.R.string.no, null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
+    }
 
-        @Override
-        protected Movie doInBackground(Integer... integers) {
-            return DetailsMovie.getDetailsMovie(integers[0]);
+    private void cancelTask() {
+        if (moviesTask != null && moviesTask.getStatus() == AsyncTask.Status.RUNNING) {
+            moviesTask.cancel(true);
         }
-
-
-        @Override
-        protected void onPostExecute(Movie movie) {
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
-            if (movie != null) {
-                Picasso.with(DetailActivity.this)
-                        .load(movie.getPosterPath())
-                        .into(mPosterImageView);
-                mTitleTextView.setText(movie.getTitle());
-                float rated = movie.getVoteAverage();
-                mRatedTextView.setText(String.valueOf(rated));
-                mRatedRatingBar.setRating(rated);
-                mReleaseDateTextView.setText(movie.getReleaseDate());
-                mOverviewTextView.setText(movie.getOverview());
-                LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
-                layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-                mGenresList.setLayoutManager(layoutManager);
-                mGenresList.setHasFixedSize(true);
-                ListChipAdapter listGenreAdapter = new ListChipAdapter(movie.getGenres());
-                mGenresList.setAdapter(listGenreAdapter);
-            } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this)
-                        .setMessage(R.string.can_not_show_details_of_this_movie)
-                        .setTitle(R.string.error)
-                        .setNegativeButton(android.R.string.no, null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        }
-
     }
 }

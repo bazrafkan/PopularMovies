@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class NetworkUtils {
+    private static final int CONNECT_TIMEOUT = 3000;
 
     public static URL buildUrl(String urlPath, Map<String, String> params) {
         Uri.Builder builder = Uri.parse(urlPath).buildUpon();
@@ -29,6 +30,7 @@ public class NetworkUtils {
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setConnectTimeout(CONNECT_TIMEOUT);
         try {
             InputStream in = urlConnection.getInputStream();
             Scanner scanner = new Scanner(in);
