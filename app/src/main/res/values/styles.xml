@@ -8,7 +8,7 @@
     </style>
 
     <style name="FilterActionBar" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_filter_list_black_24dp</item>
+        <item name="android:src">@drawable/ic_more_vert_black_24dp</item>
         <item name="android:background">?android:attr/actionBarItemBackground</item>
     </style>
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#D81B60</color>
-    <color name="colorPrimaryDark">#AD1457</color>
+    <color name="colorPrimary">#1e1e1e</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FB8C00</color>
     <color name="colorTitleAppBar">#FFFFFF</color>
-    <color name="colorPrimary400">#ec407a</color>
+    <color name="colorPrimary400">#000000</color>
     <color name="activity_detail_background">#3A3A3A</color>
 </resources>

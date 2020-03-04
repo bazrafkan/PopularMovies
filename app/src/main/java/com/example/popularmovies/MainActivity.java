@@ -19,13 +19,11 @@ import com.example.popularmovies.adapters.ListMoviesAdapter;
 import com.example.popularmovies.models.ListMovies;
 import com.example.popularmovies.models.SortedMovies;
 import com.example.popularmovies.tasks.ListMoviesTask;
-import com.google.android.material.chip.Chip;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ListMoviesAdapter.ListItemClickListener, ListMoviesTask.AsyncListMoviesResult {
     private TextView mEmptyMoviesTextView;
-    private Chip mFilterChip;
     private ProgressBar mLoadingProgressBar;
     private RecyclerView mListMovies;
     private List<ListMovies> listMovies;
@@ -36,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mEmptyMoviesTextView = findViewById(R.id.tv_empty_message);
-        mFilterChip = findViewById(R.id.cp_filter);
         mLoadingProgressBar = findViewById(R.id.pb_loading_indicator);
         mListMovies = findViewById(R.id.rv_list_movies);
         makeListMovies(SortedMovies.Popular);
@@ -66,11 +63,9 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter_by_popular:
-                mFilterChip.setText(R.string.most_popular);
                 makeListMovies(SortedMovies.Popular);
                 return true;
             case R.id.action_filter_by_rate:
-                mFilterChip.setText(R.string.top_rate);
                 makeListMovies(SortedMovies.TopRated);
                 return true;
 
@@ -96,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (result != null && result.size() > 0) {
             MainActivity.this.listMovies = result;
-            GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, getSpanCount(100));
+            GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
             mListMovies.setLayoutManager(layoutManager);
             mListMovies.setHasFixedSize(true);
             ListMoviesAdapter listMoviesAdapter = new ListMoviesAdapter(result, MainActivity.this);
@@ -110,12 +105,6 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
             AlertDialog dialog = builder.create();
             dialog.show();
         }
-    }
-
-    private int getSpanCount(int widthDP) {
-        final float density = getResources().getDisplayMetrics().density;
-        int spanCount = (int) Math.floor(mListMovies.getWidth() / (widthDP * density));
-        return spanCount;
     }
 
     private void cancelTask() {
