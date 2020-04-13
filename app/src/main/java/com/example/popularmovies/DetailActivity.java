@@ -14,9 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.popularmovies.adapters.ListChipAdapter;
+import com.example.popularmovies.adapters.ListReviewsAdapter;
 import com.example.popularmovies.adapters.ListVideosAdapter;
 import com.example.popularmovies.models.Movie;
+import com.example.popularmovies.models.Reviews;
 import com.example.popularmovies.models.Videos;
+import com.example.popularmovies.tasks.ListReviewsTask;
 import com.example.popularmovies.tasks.ListVideosTask;
 import com.example.popularmovies.tasks.MoviesTask;
 import com.squareup.picasso.Picasso;
@@ -25,8 +28,8 @@ import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements MoviesTask.AsyncMoviesTaskResult,
         ListVideosTask.AsyncVideosTaskResult,
-        ListVideosAdapter.ListItemClickListener
-{
+        ListVideosAdapter.ListItemClickListener,
+        ListReviewsTask.AsyncReviewTaskResult {
     private ProgressBar mLoadingProgressBar;
     private TextView mTitleTextView;
     private ImageView mPosterImageView;
@@ -39,6 +42,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     private List<Videos> listVideos;
     private RecyclerView mListVideos;
     private TextView mDurationTextView;
+    private ListReviewsTask listReviewsTask;
+    private RecyclerView mListReviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +58,17 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         mOverviewTextView = findViewById(R.id.tv_overview_movie);
         mGenresList = findViewById(R.id.rv_genres_movie);
         mDurationTextView = findViewById(R.id.tv_duration_movie);
-        mListVideos=findViewById(R.id.rv_trailers_movie);
+        mListVideos = findViewById(R.id.rv_trailers_movie);
+        mListReviews = findViewById(R.id.rv_reviews_movie);
 
         Intent intent = getIntent();
         int id = intent.getIntExtra(Intent.EXTRA_TEXT, 0);
         if (id != 0) {
             moviesTask = new MoviesTask(this);
             listVideosTask = new ListVideosTask(this);
+            listReviewsTask = new ListReviewsTask(this);
             listVideosTask.execute(id);
+            listReviewsTask.execute(id);
             moviesTask.execute(id);
         }
     }
@@ -74,6 +82,17 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     @Override
     public void onPreExecute() {
         mLoadingProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPostExecuteListReviews(List<Reviews> result) {
+        if (result != null && result.size() > 0) {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
+            mListReviews.setLayoutManager(layoutManager);
+            mListReviews.setHasFixedSize(true);
+            ListReviewsAdapter adapter = new ListReviewsAdapter(result);
+            mListReviews.setAdapter(adapter);
+        }
     }
 
     @Override
