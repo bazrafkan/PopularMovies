@@ -12,6 +12,8 @@ In this project, you’ll build an app to allow users to discover the most popul
 - Details page
 
   ![Details page](images/details_page.png)
+  
+  ![Details page](images/details_lan_page.png)
 
 ## Getting Started
 
