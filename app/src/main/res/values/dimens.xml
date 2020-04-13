@@ -11,7 +11,7 @@
     <dimen name="image_item_layout_width">250dp</dimen>
     <dimen name="image_item_layout_height">320dp</dimen>
     <dimen name="image_detail_layout_height">300dp</dimen>
-    <dimen name="title_movie_textSize">24sp</dimen>
+    <dimen name="title_movie_textSize">40sp</dimen>
     <dimen name="rated_movie_textSize">16sp</dimen>
     <dimen name="rated_movie_layout_marginLeft">10dp</dimen>
     <dimen name="release_date_movie_textSize">18sp</dimen>
