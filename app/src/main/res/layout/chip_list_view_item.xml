@@ -12,6 +12,6 @@
         android:layout_marginLeft="@dimen/item_genre_layout_marginLeft"
         android:layout_marginRight="@dimen/item_genre_layout_marginRight"
         android:textColor="@android:color/white"
-        app:chipBackgroundColor="@color/colorAccent" />
+        app:chipBackgroundColor="@color/colorAccentLight" />
 
 </LinearLayout>
