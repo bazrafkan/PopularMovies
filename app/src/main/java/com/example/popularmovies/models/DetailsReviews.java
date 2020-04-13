@@ -22,7 +22,7 @@ public class DetailsReviews implements Serializable {
     @SerializedName("results")
     List<Reviews> listReviews = null;
 
-    public static List<Reviews> getDetailsVideos(int id) {
+    public static List<Reviews> getDetailsReviews(int id) {
         Map<String, String> params = new HashMap<String, String>();
         try {
             params.put(PARAM_API_KEY, BuildConfig.tmdb_api_key);
