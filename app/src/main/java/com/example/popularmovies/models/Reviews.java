@@ -2,7 +2,9 @@ package com.example.popularmovies.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Reviews {
+import java.io.Serializable;
+
+public class Reviews implements Serializable {
     @SerializedName("id")
     private String id;
 

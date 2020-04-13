@@ -6,11 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DetailsMovie {
+public class DetailsMovie implements Serializable {
     private final static String TMDB_URL =
             "https://api.themoviedb.org/3/movie/";
     private final static String PARAM_API_KEY = "api_key";

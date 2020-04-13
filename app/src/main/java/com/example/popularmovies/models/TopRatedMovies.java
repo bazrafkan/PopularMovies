@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TopRatedMovies {
+public class TopRatedMovies implements Serializable {
     private final static String TMDB_URL =
             "https://api.themoviedb.org/3/movie/top_rated";
     private final static String PARAM_API_KEY = "api_key";

@@ -7,12 +7,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DetailsVideos {
+public class DetailsVideos implements Serializable {
     private final static String TMDB_URL =
             "https://api.themoviedb.org/3/movie/";
     private final static String TMDB_URL_VIDEO = "/videos";

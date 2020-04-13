@@ -2,9 +2,10 @@ package com.example.popularmovies.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Serializable {
     private final String IMAGE_PATH = "https://image.tmdb.org/t/p/";
     private final String IMAGE_SIZE = "w185";
 
@@ -26,16 +27,20 @@ public class Movie {
     @SerializedName("genres")
     private List<Genres> genres = null;
 
+    @SerializedName("runtime")
+    private String duration;
+
     public Movie() {
     }
 
-    public Movie(String title, String posterPath, String overview, String releaseDate, float voteAverage, List<Genres> genres) {
+    public Movie(String title, String posterPath, String overview, String releaseDate, float voteAverage, List<Genres> genres, String duration) {
         this.title = title;
         this.posterPath = posterPath;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
         this.genres = genres;
+        this.duration = duration;
     }
 
     public String getTitle() {
@@ -62,6 +67,10 @@ public class Movie {
         return genres;
     }
 
+    public String getDuration() {
+        return duration;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -86,6 +95,8 @@ public class Movie {
         this.genres = genres;
     }
 
-
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 }
 
