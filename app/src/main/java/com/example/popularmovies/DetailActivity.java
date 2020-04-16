@@ -5,7 +5,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -144,6 +146,16 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
 
     @Override
     public void onListItemClick(int id) {
-
+        String youtubeId = listVideos.get(id).getKey();
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + youtubeId));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://www.youtube.com/watch?v=" + youtubeId));
+        try {
+            // Try in Youtube app
+            this.startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            // Try in Youtube web site
+            this.startActivity(webIntent);
+        }
     }
 }
