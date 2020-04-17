@@ -119,8 +119,6 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
             } catch (Exception e) {
                 getMovieDetails(id);
             }
-        } else {
-            getMovieDetails(id);
         }
     }
 
@@ -140,8 +138,6 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
             } catch (Exception e) {
                 getMovieDetails(id);
             }
-        } else {
-            getMovieDetails(id);
         }
     }
 
