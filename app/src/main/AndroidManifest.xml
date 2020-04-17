@@ -22,7 +22,8 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/movie_detail"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
