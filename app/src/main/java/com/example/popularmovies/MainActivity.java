@@ -1,7 +1,6 @@
 package com.example.popularmovies;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -30,11 +29,13 @@ public class MainActivity extends AppCompatActivity implements
         ListMoviesAdapter.ListItemClickListener,
         ListMoviesTask.AsyncListMoviesResult {
     private static final String LIST_MOVIES_KEY = "listMovies";
+    private static final String FILTER_LIST_MOVIES_KEY = "filter_listMovies";
     private TextView mEmptyMoviesTextView;
     private ProgressBar mLoadingProgressBar;
     private RecyclerView mListMovies;
     private List<ListMovies> listMovies;
     private ListMoviesTask listMoviesTask;
+    private String filterListMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,28 +45,52 @@ public class MainActivity extends AppCompatActivity implements
         mLoadingProgressBar = findViewById(R.id.pb_loading_indicator);
         mListMovies = findViewById(R.id.rv_list_movies);
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(LIST_MOVIES_KEY)) {
-                Serializable serializable = savedInstanceState.getSerializable(LIST_MOVIES_KEY);
-                ArrayList<ListMovies> list = new ArrayList<>();
-                try {
-                    ArrayList tempList = (ArrayList) serializable;
-                    if (tempList != null && tempList.size() > 0) {
-                        for (int i = 0; i < tempList.size(); i++) {
-                            list.add(i, (ListMovies) tempList.get(i));
-                        }
-                        listMovies = new ArrayList<>(list);
-                        showListMovies();
-                    } else {
-                        getListVideos();
+            checkListMovies(savedInstanceState);
+            checkFilter(savedInstanceState);
+        } else {
+            getListVideos();
+        }
+    }
+
+    private void checkListMovies(Bundle savedInstanceState) {
+        if (savedInstanceState.containsKey(LIST_MOVIES_KEY)) {
+            Serializable serializable = savedInstanceState.getSerializable(LIST_MOVIES_KEY);
+            ArrayList<ListMovies> list = new ArrayList<>();
+            try {
+                ArrayList tempList = (ArrayList) serializable;
+                if (tempList != null && tempList.size() > 0) {
+                    for (int i = 0; i < tempList.size(); i++) {
+                        list.add(i, (ListMovies) tempList.get(i));
                     }
-                } catch (Exception e) {
+                    listMovies = new ArrayList<>(list);
+                    showListMovies();
+                } else {
                     getListVideos();
                 }
-            } else {
+            } catch (Exception e) {
                 getListVideos();
             }
         } else {
             getListVideos();
+        }
+    }
+
+    private void checkFilter(Bundle savedInstanceState) {
+        if (savedInstanceState.containsKey(FILTER_LIST_MOVIES_KEY)) {
+            String filter = savedInstanceState.getString(FILTER_LIST_MOVIES_KEY);
+            filterListMovies = filter;
+            if (filter != null) {
+                if (filter.equals(getString(R.string.most_popular_value))) {
+                    setTitle(getString(R.string.pop_movies));
+                }
+                if (filter.equals(getString(R.string.top_rate_value))) {
+                    setTitle(getString(R.string.top_movies));
+                }
+                if (filter.equals(getString(R.string.favorite_value))) {
+                    setTitle(getString(R.string.favorite_movies));
+                }
+            }
+
         }
     }
 
@@ -75,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements
             ArrayList<ListMovies> arrayList = new ArrayList<>(listMovies);
             outState.putSerializable(LIST_MOVIES_KEY, arrayList);
         }
+        outState.putString(FILTER_LIST_MOVIES_KEY, filterListMovies);
         super.onSaveInstanceState(outState);
     }
 
@@ -82,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String filter = sharedPreferences.getString(getString(R.string.pref_filter_key),
                 getString(R.string.most_popular_value));
+        filterListMovies = filter;
         if (filter.equals(getString(R.string.most_popular_value))) {
             setTitle(getString(R.string.pop_movies));
             makeListMovies(SortedMovies.Popular);
@@ -130,14 +157,17 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter_by_popular:
+                filterListMovies = getString(R.string.most_popular_value);
                 setTitle(getString(R.string.pop_movies));
                 makeListMovies(SortedMovies.Popular);
                 return true;
             case R.id.action_filter_by_rate:
+                filterListMovies = getString(R.string.top_rate_value);
                 setTitle(getString(R.string.top_movies));
                 makeListMovies(SortedMovies.TopRated);
                 return true;
             case R.id.action_filter_by_favorite:
+                filterListMovies = getString(R.string.favorite_value);
                 setTitle(getString(R.string.favorite_movies));
                 //TODO get favorite movies list
                 return true;
