@@ -56,16 +56,16 @@ public class MainActivity extends AppCompatActivity implements
                         listMovies = new ArrayList<>(list);
                         showListMovies();
                     } else {
-                        getSharedPreferences();
+                        getListVideos();
                     }
                 } catch (Exception e) {
-                    getSharedPreferences();
+                    getListVideos();
                 }
             } else {
-                getSharedPreferences();
+                getListVideos();
             }
         } else {
-            getSharedPreferences();
+            getListVideos();
         }
     }
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onSaveInstanceState(outState);
     }
 
-    private void getSharedPreferences() {
+    private void getListVideos() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String filter = sharedPreferences.getString(getString(R.string.pref_filter_key),
                 getString(R.string.most_popular_value));
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onPostExecute(List<ListMovies> result) {
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
-        if (result != null && result.size() > 0 && false) {
+        if (result != null && result.size() > 0) {
             MainActivity.this.listMovies = result;
             showListMovies();
         } else {
