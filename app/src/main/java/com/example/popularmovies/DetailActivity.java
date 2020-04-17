@@ -29,12 +29,17 @@ import com.example.popularmovies.tasks.ListVideosTask;
 import com.example.popularmovies.tasks.MoviesTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements MoviesTask.AsyncMoviesTaskResult,
         ListVideosTask.AsyncVideosTaskResult,
         ListVideosAdapter.ListItemClickListener,
         ListReviewsTask.AsyncReviewTaskResult {
+    private static final String MOVIE_KEY = "movie_details";
+    private static final String LIST_VIDEOS_KEY = "listVideos";
+    private static final String LIST_REVIEWS_KEY = "listReviews";
     private ProgressBar mLoadingProgressBar;
     private TextView mTitleTextView;
     private ImageView mPosterImageView;
@@ -49,6 +54,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     private TextView mDurationTextView;
     private ListReviewsTask listReviewsTask;
     private RecyclerView mListReviews;
+    private Movie movie;
+    private List<Reviews> listReviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +75,133 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         Intent intent = getIntent();
         int id = intent.getIntExtra(Intent.EXTRA_TEXT, 0);
         if (id != 0) {
-            moviesTask = new MoviesTask(this);
-            listVideosTask = new ListVideosTask(this);
-            listReviewsTask = new ListReviewsTask(this);
-            listVideosTask.execute(id);
-            listReviewsTask.execute(id);
-            moviesTask.execute(id);
+            if (savedInstanceState != null) {
+                checkMovie(savedInstanceState, id);
+                checkVideos(savedInstanceState, id);
+                checkReviews(savedInstanceState, id);
+            } else {
+                getMovieDetails(id);
+            }
         }
+    }
+
+    private void checkMovie(Bundle savedInstanceState, int id) {
+        if (savedInstanceState.containsKey(MOVIE_KEY)) {
+            Serializable serializable = savedInstanceState.getSerializable(MOVIE_KEY);
+            try {
+                if (serializable != null) {
+                    movie = (Movie) serializable;
+                    showMovie();
+                } else {
+                    getMovieDetails(id);
+                }
+            } catch (Exception e) {
+                getMovieDetails(id);
+            }
+        } else {
+            getMovieDetails(id);
+        }
+    }
+
+    private void checkVideos(Bundle savedInstanceState, int id) {
+        if (savedInstanceState.containsKey(LIST_VIDEOS_KEY)) {
+            Serializable serializable = savedInstanceState.getSerializable(LIST_VIDEOS_KEY);
+            ArrayList<Videos> list = new ArrayList<>();
+            try {
+                ArrayList tempList = (ArrayList) serializable;
+                if (tempList != null && tempList.size() > 0) {
+                    for (int i = 0; i < tempList.size(); i++) {
+                        list.add(i, (Videos) tempList.get(i));
+                    }
+                    listVideos = new ArrayList<>(list);
+                    showListVideos();
+                }
+            } catch (Exception e) {
+                getMovieDetails(id);
+            }
+        } else {
+            getMovieDetails(id);
+        }
+    }
+
+    private void checkReviews(Bundle savedInstanceState, int id) {
+        if (savedInstanceState.containsKey(LIST_REVIEWS_KEY)) {
+            Serializable serializable = savedInstanceState.getSerializable(LIST_REVIEWS_KEY);
+            ArrayList<Reviews> list = new ArrayList<>();
+            try {
+                ArrayList tempList = (ArrayList) serializable;
+                if (tempList != null && tempList.size() > 0) {
+                    for (int i = 0; i < tempList.size(); i++) {
+                        list.add(i, (Reviews) tempList.get(i));
+                    }
+                    listReviews = new ArrayList<>(list);
+                    showListReviews();
+                }
+            } catch (Exception e) {
+                getMovieDetails(id);
+            }
+        } else {
+            getMovieDetails(id);
+        }
+    }
+
+    private void getMovieDetails(int id) {
+        moviesTask = new MoviesTask(this);
+        listVideosTask = new ListVideosTask(this);
+        listReviewsTask = new ListReviewsTask(this);
+        listVideosTask.execute(id);
+        listReviewsTask.execute(id);
+        moviesTask.execute(id);
+    }
+
+    private void showMovie() {
+        Picasso.with(DetailActivity.this)
+                .load(movie.getPosterPath())
+                .into(mPosterImageView);
+        mTitleTextView.setText(movie.getTitle());
+        float rated = movie.getVoteAverage();
+        mRatedTextView.setText(String.valueOf(rated) + "/10");
+        mReleaseDateTextView.setText(movie.getReleaseDate().split("-")[0]);
+        mOverviewTextView.setText(movie.getOverview());
+        mDurationTextView.setText(movie.getDuration() + "min");
+        LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
+        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        mGenresList.setLayoutManager(layoutManager);
+        mGenresList.setHasFixedSize(true);
+        ListChipAdapter listGenreAdapter = new ListChipAdapter(movie.getGenres());
+        mGenresList.setAdapter(listGenreAdapter);
+    }
+
+    private void showListVideos() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
+        mListVideos.setLayoutManager(layoutManager);
+        mListVideos.setHasFixedSize(true);
+        ListVideosAdapter adapter = new ListVideosAdapter(listVideos, DetailActivity.this);
+        mListVideos.setAdapter(adapter);
+    }
+
+    private void showListReviews() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
+        mListReviews.setLayoutManager(layoutManager);
+        mListReviews.setHasFixedSize(true);
+        ListReviewsAdapter adapter = new ListReviewsAdapter(listReviews);
+        mListReviews.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        if (listVideos != null && listVideos.size() > 0) {
+            ArrayList<Videos> arrayList = new ArrayList<>(listVideos);
+            outState.putSerializable(LIST_VIDEOS_KEY, arrayList);
+        }
+        if (listReviews != null && listReviews.size() > 0) {
+            ArrayList<Reviews> arrayList = new ArrayList<>(listReviews);
+            outState.putSerializable(LIST_REVIEWS_KEY, arrayList);
+        }
+        if (movie != null) {
+            outState.putSerializable(MOVIE_KEY, movie);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -108,11 +235,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     @Override
     public void onPostExecuteListReviews(List<Reviews> result) {
         if (result != null && result.size() > 0) {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
-            mListReviews.setLayoutManager(layoutManager);
-            mListReviews.setHasFixedSize(true);
-            ListReviewsAdapter adapter = new ListReviewsAdapter(result);
-            mListReviews.setAdapter(adapter);
+            this.listReviews = result;
+            showListReviews();
         }
     }
 
@@ -120,11 +244,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     public void onPostExecute(List<Videos> result) {
         if (result != null && result.size() > 0) {
             DetailActivity.this.listVideos = result;
-            LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
-            mListVideos.setLayoutManager(layoutManager);
-            mListVideos.setHasFixedSize(true);
-            ListVideosAdapter adapter = new ListVideosAdapter(result, DetailActivity.this);
-            mListVideos.setAdapter(adapter);
+            showListVideos();
         }
     }
 
@@ -132,21 +252,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     public void onPostExecute(Movie result) {
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (result != null) {
-            Picasso.with(DetailActivity.this)
-                    .load(result.getPosterPath())
-                    .into(mPosterImageView);
-            mTitleTextView.setText(result.getTitle());
-            float rated = result.getVoteAverage();
-            mRatedTextView.setText(String.valueOf(rated) + "/10");
-            mReleaseDateTextView.setText(result.getReleaseDate().split("-")[0]);
-            mOverviewTextView.setText(result.getOverview());
-            mDurationTextView.setText(result.getDuration() + "min");
-            LinearLayoutManager layoutManager = new LinearLayoutManager(DetailActivity.this);
-            layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-            mGenresList.setLayoutManager(layoutManager);
-            mGenresList.setHasFixedSize(true);
-            ListChipAdapter listGenreAdapter = new ListChipAdapter(result.getGenres());
-            mGenresList.setAdapter(listGenreAdapter);
+            this.movie = result;
+            showMovie();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this)
                     .setMessage(R.string.can_not_show_details_of_this_movie)
