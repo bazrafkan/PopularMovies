@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements
                 } catch (Exception e) {
                     getSharedPreferences();
                 }
+            } else {
+                getSharedPreferences();
             }
         } else {
             getSharedPreferences();
@@ -100,6 +102,10 @@ public class MainActivity extends AppCompatActivity implements
         mListMovies.setHasFixedSize(true);
         ListMoviesAdapter listMoviesAdapter = new ListMoviesAdapter(listMovies, MainActivity.this);
         mListMovies.setAdapter(listMoviesAdapter);
+    }
+
+    private void showEmptyListMovies() {
+        mEmptyMoviesTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -155,17 +161,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onPostExecute(List<ListMovies> result) {
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
-        if (result != null && result.size() > 0) {
+        if (result != null && result.size() > 0 && false) {
             MainActivity.this.listMovies = result;
             showListMovies();
         } else {
-            mEmptyMoviesTextView.setVisibility(View.VISIBLE);
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                    .setMessage(R.string.can_not_find_movies)
-                    .setTitle(R.string.error)
-                    .setNegativeButton(android.R.string.no, null);
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            showEmptyListMovies();
         }
     }
 

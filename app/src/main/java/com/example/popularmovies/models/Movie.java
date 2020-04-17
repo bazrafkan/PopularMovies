@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Movie implements Serializable {
-    private final String IMAGE_PATH = "https://image.tmdb.org/t/p/";
-    private final String IMAGE_SIZE = "w185";
+    private static final String IMAGE_PATH = "https://image.tmdb.org/t/p/";
+    private static final String IMAGE_SIZE = "w185";
 
     @SerializedName("original_title")
     private String title;
