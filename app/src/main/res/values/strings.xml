@@ -21,4 +21,6 @@
     <string name="movie_detail">MovieDetail</string>
     <string name="pop_movies">Pop Movies</string>
     <string name="top_movies">Top Movies</string>
+    <string name="favorite">Favorite</string>
+    <string name="favorite_movies">Favorite Movies</string>
 </resources>

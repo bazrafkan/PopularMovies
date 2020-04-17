@@ -69,6 +69,10 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
                 setTitle(getString(R.string.top_movies));
                 makeListMovies(SortedMovies.TopRated);
                 return true;
+            case R.id.action_filter_by_favorite:
+                setTitle(getString(R.string.favorite_movies));
+                //TODO get favorite movies list
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
