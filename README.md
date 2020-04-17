@@ -15,6 +15,10 @@ In this project, you’ll build an app to allow users to discover the most popul
   
   ![Details page](images/details_lan_page.png)
 
+- Settings page
+
+  ![Settings page](images/settings_page.png)
+
 ## Getting Started
 
   - Create ***apikey.properties*** file in root of this project
