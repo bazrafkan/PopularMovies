@@ -3,10 +3,12 @@ package com.example.popularmovies;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -36,8 +38,25 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
         mEmptyMoviesTextView = findViewById(R.id.tv_empty_message);
         mLoadingProgressBar = findViewById(R.id.pb_loading_indicator);
         mListMovies = findViewById(R.id.rv_list_movies);
-        setTitle(getString(R.string.pop_movies));
-        makeListMovies(SortedMovies.Popular);
+        getSharedPreferences();
+    }
+
+    private void getSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String filter = sharedPreferences.getString(getString(R.string.pref_filter_key),
+                getString(R.string.most_popular_value));
+        if (filter.equals(getString(R.string.most_popular_value))) {
+            setTitle(getString(R.string.pop_movies));
+            makeListMovies(SortedMovies.Popular);
+        }
+        if (filter.equals(getString(R.string.top_rate_value))) {
+            setTitle(getString(R.string.top_movies));
+            makeListMovies(SortedMovies.TopRated);
+        }
+        if (filter.equals(getString(R.string.favorite_value))) {
+            setTitle(getString(R.string.favorite_movies));
+            //TODO get favorite movies list
+        }
     }
 
     @Override
