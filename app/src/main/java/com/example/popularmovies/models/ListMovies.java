@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class ListMovies implements Serializable {
-    private final String IMAGE_PATH = "https://image.tmdb.org/t/p/";
-    private final String IMAGE_SIZE = "w185";
+    private static final String IMAGE_PATH = "https://image.tmdb.org/t/p/";
+    private static final String IMAGE_SIZE = "w185";
 
     @SerializedName("id")
     private int id;

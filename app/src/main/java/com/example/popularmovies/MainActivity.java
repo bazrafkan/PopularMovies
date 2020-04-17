@@ -22,9 +22,14 @@ import com.example.popularmovies.models.ListMovies;
 import com.example.popularmovies.models.SortedMovies;
 import com.example.popularmovies.tasks.ListMoviesTask;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ListMoviesAdapter.ListItemClickListener, ListMoviesTask.AsyncListMoviesResult {
+public class MainActivity extends AppCompatActivity implements
+        ListMoviesAdapter.ListItemClickListener,
+        ListMoviesTask.AsyncListMoviesResult {
+    private static final String LIST_MOVIES_KEY = "listMovies";
     private TextView mEmptyMoviesTextView;
     private ProgressBar mLoadingProgressBar;
     private RecyclerView mListMovies;
@@ -38,7 +43,37 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
         mEmptyMoviesTextView = findViewById(R.id.tv_empty_message);
         mLoadingProgressBar = findViewById(R.id.pb_loading_indicator);
         mListMovies = findViewById(R.id.rv_list_movies);
-        getSharedPreferences();
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(LIST_MOVIES_KEY)) {
+                Serializable serializable = savedInstanceState.getSerializable(LIST_MOVIES_KEY);
+                ArrayList<ListMovies> list = new ArrayList<>();
+                try {
+                    ArrayList tempList = (ArrayList) serializable;
+                    if (tempList != null && tempList.size() > 0) {
+                        for (int i = 0; i < tempList.size(); i++) {
+                            list.add(i, (ListMovies) tempList.get(i));
+                        }
+                        listMovies = new ArrayList<>(list);
+                        showListMovies();
+                    } else {
+                        getSharedPreferences();
+                    }
+                } catch (Exception e) {
+                    getSharedPreferences();
+                }
+            }
+        } else {
+            getSharedPreferences();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        if (listMovies != null && listMovies.size() > 0) {
+            ArrayList<ListMovies> arrayList = new ArrayList<>(listMovies);
+            outState.putSerializable(LIST_MOVIES_KEY, arrayList);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     private void getSharedPreferences() {
@@ -57,6 +92,14 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
             setTitle(getString(R.string.favorite_movies));
             //TODO get favorite movies list
         }
+    }
+
+    private void showListMovies() {
+        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mListMovies.setLayoutManager(layoutManager);
+        mListMovies.setHasFixedSize(true);
+        ListMoviesAdapter listMoviesAdapter = new ListMoviesAdapter(listMovies, MainActivity.this);
+        mListMovies.setAdapter(listMoviesAdapter);
     }
 
     @Override
@@ -114,11 +157,7 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (result != null && result.size() > 0) {
             MainActivity.this.listMovies = result;
-            GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
-            mListMovies.setLayoutManager(layoutManager);
-            mListMovies.setHasFixedSize(true);
-            ListMoviesAdapter listMoviesAdapter = new ListMoviesAdapter(result, MainActivity.this);
-            mListMovies.setAdapter(listMoviesAdapter);
+            showListMovies();
         } else {
             mEmptyMoviesTextView.setVisibility(View.VISIBLE);
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
