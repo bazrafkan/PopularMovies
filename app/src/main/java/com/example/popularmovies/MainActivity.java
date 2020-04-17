@@ -36,9 +36,8 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
         mEmptyMoviesTextView = findViewById(R.id.tv_empty_message);
         mLoadingProgressBar = findViewById(R.id.pb_loading_indicator);
         mListMovies = findViewById(R.id.rv_list_movies);
+        setTitle(getString(R.string.pop_movies));
         makeListMovies(SortedMovies.Popular);
-
-
     }
 
     @Override
@@ -63,12 +62,13 @@ public class MainActivity extends AppCompatActivity implements ListMoviesAdapter
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter_by_popular:
+                setTitle(getString(R.string.pop_movies));
                 makeListMovies(SortedMovies.Popular);
                 return true;
             case R.id.action_filter_by_rate:
+                setTitle(getString(R.string.top_movies));
                 makeListMovies(SortedMovies.TopRated);
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
