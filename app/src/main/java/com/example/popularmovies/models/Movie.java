@@ -71,6 +71,10 @@ public class Movie implements Serializable {
         return duration;
     }
 
+    public String getOriginalPosterPath() {
+        return posterPath;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
