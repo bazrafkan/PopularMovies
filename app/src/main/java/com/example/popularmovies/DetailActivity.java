@@ -34,6 +34,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements MoviesTask.AsyncMoviesTaskResult,
@@ -128,7 +129,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                     movie.getOverview(),
                     movie.getReleaseDate(),
                     movie.getVoteAverage(),
-                    movie.getDuration());
+                    movie.getDuration(),
+                    Calendar.getInstance().getTime());
             if (mFavoriteButton.getText().equals(getString(R.string.mark_as_favorite))) {
                 insertFavoritesTask = new FavoritesTask(
                         new FavoritesTask.AsyncListMoviesResult() {

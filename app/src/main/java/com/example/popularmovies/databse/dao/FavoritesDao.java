@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface FavoritesDao {
 
-    @Query("SELECT * FROM favorites")
+    @Query("SELECT * FROM favorites ORDER BY updateAt")
     LiveData<List<Favorites>> loadAllFavorites();
 
     @Query("SELECT * FROM favorites WHERE id = :id")

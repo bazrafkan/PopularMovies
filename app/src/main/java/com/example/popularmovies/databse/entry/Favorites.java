@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity(tableName = "favorites")
 public class Favorites {
 
@@ -22,11 +24,13 @@ public class Favorites {
 
     private String duration;
 
+    private Date updateAt;
+
     @Ignore
     public Favorites() {
     }
 
-    public Favorites(int id, String title, String posterPath, String overview, String releaseDate, float voteAverage, String duration) {
+    public Favorites(int id, String title, String posterPath, String overview, String releaseDate, float voteAverage, String duration, Date updateAt) {
         this.id = id;
         this.title = title;
         this.posterPath = posterPath;
@@ -34,6 +38,7 @@ public class Favorites {
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
         this.duration = duration;
+        this.updateAt = updateAt;
     }
 
     public int getId() {
@@ -64,6 +69,10 @@ public class Favorites {
         return duration;
     }
 
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -90,5 +99,9 @@ public class Favorites {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

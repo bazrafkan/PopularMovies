@@ -6,11 +6,13 @@ import android.util.Log;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.example.popularmovies.databse.dao.FavoritesDao;
 import com.example.popularmovies.databse.entry.Favorites;
 
 @Database(version = 1, entities = {Favorites.class}, exportSchema = false)
+@TypeConverters(Converter.class)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
     private static final Object LOCK = new Object();
