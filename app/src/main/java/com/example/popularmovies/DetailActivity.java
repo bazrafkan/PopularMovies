@@ -44,6 +44,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     private static final String MOVIE_KEY = "movie_details";
     private static final String LIST_VIDEOS_KEY = "listVideos";
     private static final String LIST_REVIEWS_KEY = "listReviews";
+    private static final String FAVORITES_KEY = "favorites_text";
     private ProgressBar mLoadingProgressBar;
     private TextView mTitleTextView;
     private ImageView mPosterImageView;
@@ -64,6 +65,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     private FavoritesTask insertFavoritesTask;
     private FavoritesTask getFavoritesTask;
     private FavoritesTask deleteFavoritesTask;
+    private String favoritesButtonText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,29 +94,13 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         });
 
         if (id != 0) {
-            Favorites item = new Favorites();
-            item.setId(id);
-            getFavoritesTask = new FavoritesTask(new FavoritesTask.AsyncListMoviesResult() {
-                @Override
-                public void onPreExecute() {
-                    mFavoriteButton.setText(getString(R.string.please_wait));
-                }
-
-                @Override
-                public void onPostExecute(Favorites result) {
-                    if (result != null) {
-                        mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
-                    } else {
-                        mFavoriteButton.setText(getString(R.string.mark_as_favorite));
-                    }
-                }
-            }, getApplicationContext(), FavoritesTask.GET_ACTION);
-            getFavoritesTask.execute(item);
             if (savedInstanceState != null) {
                 checkMovie(savedInstanceState, id);
                 checkVideos(savedInstanceState, id);
                 checkReviews(savedInstanceState, id);
+                checkFavorites(savedInstanceState, id);
             } else {
+                getFavorites(id);
                 getMovieDetails(id);
             }
         }
@@ -142,6 +128,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                             @Override
                             public void onPostExecute(Favorites result) {
                                 mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
+                                favoritesButtonText = mFavoriteButton.getText().toString();
                             }
                         }
                         , getApplicationContext(),
@@ -159,6 +146,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                             @Override
                             public void onPostExecute(Favorites result) {
                                 mFavoriteButton.setText(getString(R.string.mark_as_favorite));
+                                favoritesButtonText = mFavoriteButton.getText().toString();
                             }
                         }
                         , getApplicationContext(),
@@ -166,6 +154,24 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                 );
                 deleteFavoritesTask.execute(favorites);
             }
+        }
+    }
+
+    private void checkFavorites(Bundle savedInstanceState, int id) {
+        if (savedInstanceState.containsKey(FAVORITES_KEY)) {
+            String title = savedInstanceState.getString(FAVORITES_KEY);
+            try {
+                if (title != null && title != "") {
+                    mFavoriteButton.setText(title);
+                    favoritesButtonText = title;
+                } else {
+                    getFavorites(id);
+                }
+            } catch (Exception e) {
+                getFavorites(id);
+            }
+        } else {
+            getFavorites(id);
         }
     }
 
@@ -225,6 +231,28 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         }
     }
 
+    private void getFavorites(int id) {
+        Favorites item = new Favorites();
+        item.setId(id);
+        getFavoritesTask = new FavoritesTask(new FavoritesTask.AsyncListMoviesResult() {
+            @Override
+            public void onPreExecute() {
+                mFavoriteButton.setText(getString(R.string.please_wait));
+            }
+
+            @Override
+            public void onPostExecute(Favorites result) {
+                if (result != null) {
+                    mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
+                } else {
+                    mFavoriteButton.setText(getString(R.string.mark_as_favorite));
+                }
+                favoritesButtonText = mFavoriteButton.getText().toString();
+            }
+        }, getApplicationContext(), FavoritesTask.GET_ACTION);
+        getFavoritesTask.execute(item);
+    }
+
     private void getMovieDetails(int id) {
         moviesTask = new MoviesTask(this);
         listVideosTask = new ListVideosTask(this);
@@ -280,6 +308,9 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         }
         if (movie != null) {
             outState.putSerializable(MOVIE_KEY, movie);
+        }
+        if (favoritesButtonText != null && favoritesButtonText != "") {
+            outState.putString(FAVORITES_KEY, favoritesButtonText);
         }
         super.onSaveInstanceState(outState);
     }
