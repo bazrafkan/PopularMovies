@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,9 +22,11 @@ import android.widget.TextView;
 import com.example.popularmovies.adapters.ListChipAdapter;
 import com.example.popularmovies.adapters.ListReviewsAdapter;
 import com.example.popularmovies.adapters.ListVideosAdapter;
+import com.example.popularmovies.databse.entry.Favorites;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.models.Reviews;
 import com.example.popularmovies.models.Videos;
+import com.example.popularmovies.tasks.FavoritesTask;
 import com.example.popularmovies.tasks.ListReviewsTask;
 import com.example.popularmovies.tasks.ListVideosTask;
 import com.example.popularmovies.tasks.MoviesTask;
@@ -56,6 +59,10 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     private RecyclerView mListReviews;
     private Movie movie;
     private List<Reviews> listReviews;
+    private Button mFavoriteButton;
+    private FavoritesTask insertFavoritesTask;
+    private FavoritesTask getFavoritesTask;
+    private FavoritesTask deleteFavoritesTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +78,91 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         mDurationTextView = findViewById(R.id.tv_duration_movie);
         mListVideos = findViewById(R.id.rv_trailers_movie);
         mListReviews = findViewById(R.id.rv_reviews_movie);
+        mFavoriteButton = findViewById(R.id.bn_change_favorite_movie);
 
         Intent intent = getIntent();
-        int id = intent.getIntExtra(Intent.EXTRA_TEXT, 0);
+        final int id = intent.getIntExtra(Intent.EXTRA_TEXT, 0);
+
+        mFavoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFavoritesList(id);
+            }
+        });
+
         if (id != 0) {
+            Favorites item = new Favorites();
+            item.setId(id);
+            getFavoritesTask = new FavoritesTask(new FavoritesTask.AsyncListMoviesResult() {
+                @Override
+                public void onPreExecute() {
+                    mFavoriteButton.setText(getString(R.string.please_wait));
+                }
+
+                @Override
+                public void onPostExecute(Favorites result) {
+                    if (result != null) {
+                        mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
+                    } else {
+                        mFavoriteButton.setText(getString(R.string.mark_as_favorite));
+                    }
+                }
+            }, getApplicationContext(), FavoritesTask.GET_ACTION);
+            getFavoritesTask.execute(item);
             if (savedInstanceState != null) {
                 checkMovie(savedInstanceState, id);
                 checkVideos(savedInstanceState, id);
                 checkReviews(savedInstanceState, id);
             } else {
                 getMovieDetails(id);
+            }
+        }
+    }
+
+    private void changeFavoritesList(int id) {
+        if (movie != null && id != 0) {
+            Favorites favorites = new Favorites(
+                    id,
+                    movie.getTitle(),
+                    movie.getOriginalPosterPath(),
+                    movie.getOverview(),
+                    movie.getReleaseDate(),
+                    movie.getVoteAverage(),
+                    movie.getDuration());
+            if (mFavoriteButton.getText().equals(getString(R.string.mark_as_favorite))) {
+                insertFavoritesTask = new FavoritesTask(
+                        new FavoritesTask.AsyncListMoviesResult() {
+                            @Override
+                            public void onPreExecute() {
+                                mFavoriteButton.setText(getString(R.string.please_wait));
+                            }
+
+                            @Override
+                            public void onPostExecute(Favorites result) {
+                                mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
+                            }
+                        }
+                        , getApplicationContext(),
+                        FavoritesTask.INSERT_ACTION
+                );
+                insertFavoritesTask.execute(favorites);
+            } else if (mFavoriteButton.getText().equals(getString(R.string.mark_as_un_favorite))) {
+                deleteFavoritesTask = new FavoritesTask(
+                        new FavoritesTask.AsyncListMoviesResult() {
+                            @Override
+                            public void onPreExecute() {
+                                mFavoriteButton.setText(getString(R.string.please_wait));
+                            }
+
+                            @Override
+                            public void onPostExecute(Favorites result) {
+                                mFavoriteButton.setText(getString(R.string.mark_as_favorite));
+                            }
+                        }
+                        , getApplicationContext(),
+                        FavoritesTask.DELETE_ACTION
+                );
+                deleteFavoritesTask.execute(favorites);
             }
         }
     }

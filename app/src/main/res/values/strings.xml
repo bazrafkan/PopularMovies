@@ -13,6 +13,8 @@
     <string name="can_not_find_movies">Can not find movies</string>
     <string name="can_not_show_details_of_this_movie">Can not show details of this movie</string>
     <string name="mark_as_favorite">MARK AS FAVORITE</string>
+    <string name="mark_as_un_favorite">MARK AS UNFAVORITE</string>
+    <string name="please_wait">Please wait</string>
     <string name="trailers">Trailers:</string>
     <string name="reviews">Reviews:</string>
     <string name="author">Author:</string>
