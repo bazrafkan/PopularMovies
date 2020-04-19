@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,6 +39,7 @@ import com.example.popularmovies.tasks.ListVideosTask;
 import com.example.popularmovies.tasks.MoviesTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -112,6 +116,10 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
 
     private void changeFavoritesList(int id) {
         if (movie != null && id != 0) {
+            Drawable d = mPosterImageView.getDrawable();
+            Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             List<Genre> genres = new ArrayList<>();
             for (Genres item : movie.getGenres()) {
                 genres.add(new Genre(item, id));
@@ -124,6 +132,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                     movie.getReleaseDate(),
                     movie.getVoteAverage(),
                     movie.getDuration(),
+                    stream.toByteArray(),
                     Calendar.getInstance().getTime());
             FavoritesAndGenre favoritesAndGenre = new FavoritesAndGenre();
             favoritesAndGenre.favorites = favorites;

@@ -1,5 +1,6 @@
 package com.example.popularmovies.databse.entry;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -26,11 +27,22 @@ public class Favorites {
 
     private Date updateAt;
 
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    private byte[] image;
+
     @Ignore
     public Favorites() {
     }
 
-    public Favorites(int id, String title, String posterPath, String overview, String releaseDate, float voteAverage, String duration, Date updateAt) {
+    public Favorites(int id,
+                     String title,
+                     String posterPath,
+                     String overview,
+                     String releaseDate,
+                     float voteAverage,
+                     String duration,
+                     byte[] image,
+                     Date updateAt) {
         this.id = id;
         this.title = title;
         this.posterPath = posterPath;
@@ -38,6 +50,7 @@ public class Favorites {
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
         this.duration = duration;
+        this.image = image;
         this.updateAt = updateAt;
     }
 
@@ -67,6 +80,10 @@ public class Favorites {
 
     public String getDuration() {
         return duration;
+    }
+
+    public byte[] getImage() {
+        return image;
     }
 
     public Date getUpdateAt() {
@@ -99,6 +116,10 @@ public class Favorites {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public void setUpdateAt(Date updateAt) {
