@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.popularmovies.adapters.ListMoviesAdapter;
 import com.example.popularmovies.databse.AppDatabase;
 import com.example.popularmovies.databse.entry.Favorites;
+import com.example.popularmovies.databse.entry.FavoritesAndGenre;
 import com.example.popularmovies.models.ListMovies;
 import com.example.popularmovies.models.SortedMovies;
 import com.example.popularmovies.tasks.ListMoviesTask;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements
     private ListMoviesTask listMoviesTask;
     private String filterListMovies;
     private AppDatabase mAppDatabase;
-    private List<Favorites> listFavorites;
+    private List<FavoritesAndGenre> listFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,18 +154,18 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initDatabase() {
-        LiveData<List<Favorites>> liveData = mAppDatabase.favoritesDao().loadAllFavorites();
+        LiveData<List<FavoritesAndGenre>> liveData = mAppDatabase.favoritesAndGenreDao().loadAllFavoritesAndGenre();
         liveData.observe(
                 this,
-                new Observer<List<Favorites>>() {
+                new Observer<List<FavoritesAndGenre>>() {
                     @Override
-                    public void onChanged(List<Favorites> favorites) {
-                        listFavorites = favorites;
+                    public void onChanged(List<FavoritesAndGenre> result) {
+                        listFavorites = result;
                         if (filterListMovies.equals(getString(R.string.favorite_value))) {
                             List<ListMovies> list = new ArrayList<>();
-                            for (Favorites item : listFavorites
+                            for (FavoritesAndGenre item : listFavorites
                             ) {
-                                list.add(new ListMovies(item.getId(), item.getPosterPath()));
+                                list.add(new ListMovies(item.favorites.getId(), item.favorites.getPosterPath()));
                             }
                             if (!list.equals(listMovies)) {
                                 listMovies = list;
@@ -187,9 +188,9 @@ public class MainActivity extends AppCompatActivity implements
             if (listFavorites != null
                     && listFavorites.size() > 0) {
                 List<ListMovies> list = new ArrayList<>();
-                for (Favorites item : listFavorites
+                for (FavoritesAndGenre item : listFavorites
                 ) {
-                    list.add(new ListMovies(item.getId(), item.getPosterPath()));
+                    list.add(new ListMovies(item.favorites.getId(), item.favorites.getPosterPath()));
                 }
                 if (!listMovies.equals(list)) {
                     listMovies = list;

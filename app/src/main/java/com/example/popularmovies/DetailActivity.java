@@ -23,9 +23,13 @@ import com.example.popularmovies.adapters.ListChipAdapter;
 import com.example.popularmovies.adapters.ListReviewsAdapter;
 import com.example.popularmovies.adapters.ListVideosAdapter;
 import com.example.popularmovies.databse.entry.Favorites;
+import com.example.popularmovies.databse.entry.FavoritesAndGenre;
+import com.example.popularmovies.databse.entry.Genre;
+import com.example.popularmovies.models.Genres;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.models.Reviews;
 import com.example.popularmovies.models.Videos;
+import com.example.popularmovies.tasks.FavoritesAndGenreTask;
 import com.example.popularmovies.tasks.FavoritesTask;
 import com.example.popularmovies.tasks.ListReviewsTask;
 import com.example.popularmovies.tasks.ListVideosTask;
@@ -62,10 +66,10 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     private Movie movie;
     private List<Reviews> listReviews;
     private Button mFavoriteButton;
-    private FavoritesTask insertFavoritesTask;
     private FavoritesTask getFavoritesTask;
-    private FavoritesTask deleteFavoritesTask;
     private String favoritesButtonText;
+    private FavoritesAndGenreTask insertFavoritesAndGenreTask;
+    private FavoritesAndGenreTask deleteFavoritesAndGenreTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,10 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
 
     private void changeFavoritesList(int id) {
         if (movie != null && id != 0) {
+            List<Genre> genres = new ArrayList<>();
+            for (Genres item : movie.getGenres()) {
+                genres.add(new Genre(item, id));
+            }
             Favorites favorites = new Favorites(
                     id,
                     movie.getTitle(),
@@ -117,44 +125,48 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                     movie.getVoteAverage(),
                     movie.getDuration(),
                     Calendar.getInstance().getTime());
+            FavoritesAndGenre favoritesAndGenre = new FavoritesAndGenre();
+            favoritesAndGenre.favorites = favorites;
+            favoritesAndGenre.genres = genres;
             if (mFavoriteButton.getText().equals(getString(R.string.mark_as_favorite))) {
-                insertFavoritesTask = new FavoritesTask(
-                        new FavoritesTask.AsyncListMoviesResult() {
+                insertFavoritesAndGenreTask = new FavoritesAndGenreTask(
+                        new FavoritesAndGenreTask.AsyncFavoritesAndGenreTaskResult() {
                             @Override
                             public void onPreExecute() {
                                 mFavoriteButton.setText(getString(R.string.please_wait));
                             }
 
                             @Override
-                            public void onPostExecute(Favorites result) {
+                            public void onPostExecute(FavoritesAndGenre result) {
                                 mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
                                 favoritesButtonText = mFavoriteButton.getText().toString();
                             }
-                        }
-                        , getApplicationContext(),
-                        FavoritesTask.INSERT_ACTION
+                        },
+                        getApplicationContext(),
+                        FavoritesAndGenreTask.INSERT_ACTION
                 );
-                insertFavoritesTask.execute(favorites);
+                insertFavoritesAndGenreTask.execute(favoritesAndGenre);
             } else if (mFavoriteButton.getText().equals(getString(R.string.mark_as_un_favorite))) {
-                deleteFavoritesTask = new FavoritesTask(
-                        new FavoritesTask.AsyncListMoviesResult() {
+                deleteFavoritesAndGenreTask = new FavoritesAndGenreTask(
+                        new FavoritesAndGenreTask.AsyncFavoritesAndGenreTaskResult() {
                             @Override
                             public void onPreExecute() {
                                 mFavoriteButton.setText(getString(R.string.please_wait));
                             }
 
                             @Override
-                            public void onPostExecute(Favorites result) {
+                            public void onPostExecute(FavoritesAndGenre result) {
                                 mFavoriteButton.setText(getString(R.string.mark_as_favorite));
                                 favoritesButtonText = mFavoriteButton.getText().toString();
                             }
-                        }
-                        , getApplicationContext(),
-                        FavoritesTask.DELETE_ACTION
+                        },
+                        getApplicationContext(),
+                        FavoritesAndGenreTask.DELETE_ACTION
                 );
-                deleteFavoritesTask.execute(favorites);
+                deleteFavoritesAndGenreTask.execute(favoritesAndGenre);
             }
         }
+
     }
 
     private void checkFavorites(Bundle savedInstanceState, int id) {
