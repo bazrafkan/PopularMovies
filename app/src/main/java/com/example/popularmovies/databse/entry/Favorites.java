@@ -5,10 +5,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity(tableName = "favorites")
-public class Favorites {
+public class Favorites implements Serializable {
 
     @PrimaryKey
     private int id;

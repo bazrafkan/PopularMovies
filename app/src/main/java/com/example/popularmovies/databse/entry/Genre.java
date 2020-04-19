@@ -6,8 +6,10 @@ import androidx.room.PrimaryKey;
 
 import com.example.popularmovies.models.Genres;
 
+import java.io.Serializable;
+
 @Entity(tableName = "genre")
-public class Genre {
+public class Genre implements Serializable {
 
     @PrimaryKey
     private int id;
