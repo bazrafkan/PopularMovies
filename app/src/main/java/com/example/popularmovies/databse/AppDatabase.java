@@ -8,10 +8,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.popularmovies.databse.dao.FavoritesAndGenreDao;
 import com.example.popularmovies.databse.dao.FavoritesDao;
+import com.example.popularmovies.databse.dao.GenreDao;
 import com.example.popularmovies.databse.entry.Favorites;
+import com.example.popularmovies.databse.entry.Genre;
 
-@Database(version = 1, entities = {Favorites.class}, exportSchema = false)
+@Database(version = 1, entities = {Favorites.class, Genre.class}, exportSchema = false)
 @TypeConverters(Converter.class)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
@@ -35,4 +38,8 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     abstract public FavoritesDao favoritesDao();
+
+    abstract public GenreDao genreDao();
+
+    abstract public FavoritesAndGenreDao favoritesAndGenreDao();
 }
