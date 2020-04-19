@@ -1,5 +1,7 @@
 package com.example.popularmovies.models;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -30,11 +32,32 @@ public class ListMovies implements Serializable {
         return IMAGE_PATH + IMAGE_SIZE + posterPath;
     }
 
+    public String getOriginalPosterPath() {
+        return posterPath;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null && this == null) {
+            return true;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        } else {
+            ListMovies method = (ListMovies) obj;
+            if (this.id == method.getId()
+                    && this.posterPath.equals(method.getOriginalPosterPath())) {
+                return true;
+            }
+            return false;
+        }
     }
 }
