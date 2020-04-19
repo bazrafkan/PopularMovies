@@ -2,6 +2,8 @@ package com.example.popularmovies;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.popularmovies.adapters.ListMoviesAdapter;
+import com.example.popularmovies.databse.AppDatabase;
+import com.example.popularmovies.databse.entry.Favorites;
 import com.example.popularmovies.models.ListMovies;
 import com.example.popularmovies.models.SortedMovies;
 import com.example.popularmovies.tasks.ListMoviesTask;
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements
     private List<ListMovies> listMovies;
     private ListMoviesTask listMoviesTask;
     private String filterListMovies;
+    private AppDatabase mAppDatabase;
+    private List<Favorites> listFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +50,18 @@ public class MainActivity extends AppCompatActivity implements
         mEmptyMoviesTextView = findViewById(R.id.tv_empty_message);
         mLoadingProgressBar = findViewById(R.id.pb_loading_indicator);
         mListMovies = findViewById(R.id.rv_list_movies);
+        mAppDatabase = AppDatabase.getInstance(getApplicationContext());
+        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mListMovies.setLayoutManager(layoutManager);
+        mListMovies.setHasFixedSize(true);
+
         if (savedInstanceState != null) {
             checkListMovies(savedInstanceState);
             checkFilter(savedInstanceState);
         } else {
             getListVideos();
         }
+        initDatabase();
     }
 
     private void checkListMovies(Bundle savedInstanceState) {
@@ -90,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements
                     setTitle(getString(R.string.favorite_movies));
                 }
             }
-
         }
     }
 
@@ -119,19 +130,19 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (filter.equals(getString(R.string.favorite_value))) {
             setTitle(getString(R.string.favorite_movies));
-            //TODO get favorite movies list
+            makeListMovies(SortedMovies.Favorite);
         }
     }
 
     private void showListMovies() {
-        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
-        mListMovies.setLayoutManager(layoutManager);
-        mListMovies.setHasFixedSize(true);
+        mEmptyMoviesTextView.setVisibility(View.INVISIBLE);
         ListMoviesAdapter listMoviesAdapter = new ListMoviesAdapter(listMovies, MainActivity.this);
         mListMovies.setAdapter(listMoviesAdapter);
     }
 
     private void showEmptyListMovies() {
+        ListMoviesAdapter listMoviesAdapter = new ListMoviesAdapter(null, MainActivity.this);
+        mListMovies.setAdapter(listMoviesAdapter);
         mEmptyMoviesTextView.setVisibility(View.VISIBLE);
     }
 
@@ -141,10 +152,60 @@ public class MainActivity extends AppCompatActivity implements
         super.onDestroy();
     }
 
+    private void initDatabase() {
+        LiveData<List<Favorites>> liveData = mAppDatabase.favoritesDao().loadAllFavorites();
+        liveData.observe(
+                this,
+                new Observer<List<Favorites>>() {
+                    @Override
+                    public void onChanged(List<Favorites> favorites) {
+                        listFavorites = favorites;
+                        if (filterListMovies.equals(getString(R.string.favorite_value))) {
+                            List<ListMovies> list = new ArrayList<>();
+                            for (Favorites item : listFavorites
+                            ) {
+                                list.add(new ListMovies(item.getId(), item.getPosterPath()));
+                            }
+                            if (!list.equals(listMovies)) {
+                                listMovies = list;
+                                if (listMovies != null && listMovies.size() > 0) {
+                                    showListMovies();
+                                } else {
+                                    showEmptyListMovies();
+                                }
+                            }
+                        }
+                    }
+                }
+        );
+    }
+
     private void makeListMovies(SortedMovies sortedMovies) {
         cancelTask();
-        listMoviesTask = new ListMoviesTask(this);
-        listMoviesTask.execute(sortedMovies);
+        if (sortedMovies == SortedMovies.Favorite
+        ) {
+            if (listFavorites != null
+                    && listFavorites.size() > 0) {
+                List<ListMovies> list = new ArrayList<>();
+                for (Favorites item : listFavorites
+                ) {
+                    list.add(new ListMovies(item.getId(), item.getPosterPath()));
+                }
+                if (!listMovies.equals(list)) {
+                    listMovies = list;
+                    if (listMovies != null && listMovies.size() > 0) {
+                        showListMovies();
+                    } else {
+                        showEmptyListMovies();
+                    }
+                }
+            } else {
+                showEmptyListMovies();
+            }
+        } else {
+            listMoviesTask = new ListMoviesTask(this);
+            listMoviesTask.execute(sortedMovies);
+        }
     }
 
     @Override
@@ -169,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_filter_by_favorite:
                 filterListMovies = getString(R.string.favorite_value);
                 setTitle(getString(R.string.favorite_movies));
-                //TODO get favorite movies list
+                makeListMovies(SortedMovies.Favorite);
                 return true;
         }
         return super.onOptionsItemSelected(item);
