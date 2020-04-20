@@ -13,8 +13,9 @@ import com.example.popularmovies.databse.dao.FavoriteMoviesDao;
 import com.example.popularmovies.databse.entry.Favorite;
 import com.example.popularmovies.databse.entry.Genre;
 import com.example.popularmovies.databse.entry.Review;
+import com.example.popularmovies.databse.entry.Video;
 
-@Database(version = 1, entities = {Favorite.class, Genre.class, Review.class}, exportSchema = false)
+@Database(version = 1, entities = {Favorite.class, Genre.class, Review.class, Video.class}, exportSchema = false)
 @TypeConverters(Converter.class)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();

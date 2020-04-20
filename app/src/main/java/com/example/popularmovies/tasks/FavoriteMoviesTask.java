@@ -39,7 +39,11 @@ public class FavoriteMoviesTask extends AsyncTask<FavoriteMovies, Void, Favorite
         FavoriteMovies item = favoriteMovies[0];
         int id = item.favorite.getId();
         if (action == INSERT_ACTION) {
-            mAppDatabase.favoriteMoviesDao().insertFavoriteMovies(item.favorite, item.genres,item.reviews);
+            mAppDatabase.favoriteMoviesDao().insertFavoriteMovies(
+                    item.favorite,
+                    item.genres,
+                    item.reviews,
+                    item.videos);
             return mAppDatabase.favoriteMoviesDao().getFavoriteMovies(id);
         }
         if (action == DELETE_ACTION) {

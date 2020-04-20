@@ -30,6 +30,7 @@ import com.example.popularmovies.databse.FavoriteMovies;
 import com.example.popularmovies.databse.entry.Favorite;
 import com.example.popularmovies.databse.entry.Genre;
 import com.example.popularmovies.databse.entry.Review;
+import com.example.popularmovies.databse.entry.Video;
 import com.example.popularmovies.models.Genres;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.models.Reviews;
@@ -164,6 +165,10 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
             for (Reviews item : listReviews) {
                 reviews.add(new Review(item, id));
             }
+            List<Video> videos = new ArrayList<>();
+            for (Videos item : listVideos) {
+                videos.add(new Video(item, id));
+            }
             Favorite favorite = new Favorite(
                     id,
                     movie.getTitle(),
@@ -178,6 +183,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
             favoriteMovies.favorite = favorite;
             favoriteMovies.genres = genres;
             favoriteMovies.reviews = reviews;
+            favoriteMovies.videos = videos;
             if (mFavoriteButton.getText().equals(getString(R.string.mark_as_favorite))) {
                 insertFavoriteMoviesTask = new FavoriteMoviesTask(
                         new FavoriteMoviesTask.AsyncFavoritesAndGenreTaskResult() {

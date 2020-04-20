@@ -6,6 +6,7 @@ import androidx.room.Relation;
 import com.example.popularmovies.databse.entry.Favorite;
 import com.example.popularmovies.databse.entry.Genre;
 import com.example.popularmovies.databse.entry.Review;
+import com.example.popularmovies.databse.entry.Video;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,4 +20,8 @@ public class FavoriteMovies implements Serializable {
 
     @Relation(parentColumn = "id", entityColumn = "favoriteId", entity = Review.class)
     public List<Review> reviews;
+
+
+    @Relation(parentColumn = "id", entityColumn = "favoriteId", entity = Video.class)
+    public List<Video> videos;
 }
