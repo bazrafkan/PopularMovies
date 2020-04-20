@@ -26,15 +26,15 @@ import android.widget.TextView;
 import com.example.popularmovies.adapters.ListChipAdapter;
 import com.example.popularmovies.adapters.ListReviewsAdapter;
 import com.example.popularmovies.adapters.ListVideosAdapter;
-import com.example.popularmovies.databse.FavoritesMovies;
-import com.example.popularmovies.databse.entry.Favorites;
+import com.example.popularmovies.databse.FavoriteMovies;
+import com.example.popularmovies.databse.entry.Favorite;
 import com.example.popularmovies.databse.entry.Genre;
 import com.example.popularmovies.models.Genres;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.models.Reviews;
 import com.example.popularmovies.models.Videos;
-import com.example.popularmovies.tasks.FavoritesMoviesTask;
-import com.example.popularmovies.tasks.FavoritesTask;
+import com.example.popularmovies.tasks.FavoriteMoviesTask;
+import com.example.popularmovies.tasks.FavoriteTask;
 import com.example.popularmovies.tasks.ListReviewsTask;
 import com.example.popularmovies.tasks.ListVideosTask;
 import com.example.popularmovies.tasks.MoviesTask;
@@ -55,6 +55,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     private static final String LIST_VIDEOS_KEY = "listVideos";
     private static final String LIST_REVIEWS_KEY = "listReviews";
     private static final String FAVORITES_KEY = "favorites_text";
+
     private ProgressBar mLoadingProgressBar;
     private TextView mTitleTextView;
     private ImageView mPosterImageView;
@@ -62,21 +63,25 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     private TextView mReleaseDateTextView;
     private TextView mOverviewTextView;
     private RecyclerView mGenresList;
+    private RecyclerView mListVideos;
+    private TextView mDurationTextView;
+    private RecyclerView mListReviews;
+    private Button mFavoriteButton;
+    private String favoritesButtonText;
+
     private MoviesTask moviesTask;
     private ListVideosTask listVideosTask;
     private List<Videos> listVideos;
-    private RecyclerView mListVideos;
-    private TextView mDurationTextView;
     private ListReviewsTask listReviewsTask;
-    private RecyclerView mListReviews;
+
     private Movie movie;
     private List<Reviews> listReviews;
-    private Button mFavoriteButton;
-    private FavoritesTask getFavoritesTask;
-    private String favoritesButtonText;
-    private FavoritesMoviesTask insertFavoritesMoviesTask;
-    private FavoritesMoviesTask deleteFavoritesMoviesTask;
-    private FavoritesMovies favoritesMovie;
+
+    private FavoriteTask getFavoriteTask;
+
+    private FavoriteMoviesTask insertFavoriteMoviesTask;
+    private FavoriteMoviesTask deleteFavoriteMoviesTask;
+    private FavoriteMovies favoriteMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +116,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         Serializable serializable = intent.getSerializableExtra(MainActivity.FAVORITES_EXTRA_KEY);
         if (serializable != null) {
             try {
-                favoritesMovie = (FavoritesMovies) serializable;
+                favoriteMovie = (FavoriteMovies) serializable;
                 showMovie();
             } catch (Exception e) {
                 getInitMovieDetails(savedInstanceState, intent);
@@ -154,7 +159,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
             for (Genres item : movie.getGenres()) {
                 genres.add(new Genre(item, id));
             }
-            Favorites favorites = new Favorites(
+            Favorite favorite = new Favorite(
                     id,
                     movie.getTitle(),
                     movie.getOriginalPosterPath(),
@@ -164,45 +169,45 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                     movie.getDuration(),
                     stream.toByteArray(),
                     Calendar.getInstance().getTime());
-            FavoritesMovies favoritesAndGenre = new FavoritesMovies();
-            favoritesAndGenre.favorites = favorites;
-            favoritesAndGenre.genres = genres;
+            FavoriteMovies favoriteMovies = new FavoriteMovies();
+            favoriteMovies.favorite = favorite;
+            favoriteMovies.genres = genres;
             if (mFavoriteButton.getText().equals(getString(R.string.mark_as_favorite))) {
-                insertFavoritesMoviesTask = new FavoritesMoviesTask(
-                        new FavoritesMoviesTask.AsyncFavoritesAndGenreTaskResult() {
+                insertFavoriteMoviesTask = new FavoriteMoviesTask(
+                        new FavoriteMoviesTask.AsyncFavoritesAndGenreTaskResult() {
                             @Override
                             public void onPreExecute() {
                                 mFavoriteButton.setText(getString(R.string.please_wait));
                             }
 
                             @Override
-                            public void onPostExecute(FavoritesMovies result) {
+                            public void onPostExecute(FavoriteMovies result) {
                                 mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
                                 favoritesButtonText = mFavoriteButton.getText().toString();
                             }
                         },
                         getApplicationContext(),
-                        FavoritesMoviesTask.INSERT_ACTION
+                        FavoriteMoviesTask.INSERT_ACTION
                 );
-                insertFavoritesMoviesTask.execute(favoritesAndGenre);
+                insertFavoriteMoviesTask.execute(favoriteMovies);
             } else if (mFavoriteButton.getText().equals(getString(R.string.mark_as_un_favorite))) {
-                deleteFavoritesMoviesTask = new FavoritesMoviesTask(
-                        new FavoritesMoviesTask.AsyncFavoritesAndGenreTaskResult() {
+                deleteFavoriteMoviesTask = new FavoriteMoviesTask(
+                        new FavoriteMoviesTask.AsyncFavoritesAndGenreTaskResult() {
                             @Override
                             public void onPreExecute() {
                                 mFavoriteButton.setText(getString(R.string.please_wait));
                             }
 
                             @Override
-                            public void onPostExecute(FavoritesMovies result) {
+                            public void onPostExecute(FavoriteMovies result) {
                                 mFavoriteButton.setText(getString(R.string.mark_as_favorite));
                                 favoritesButtonText = mFavoriteButton.getText().toString();
                             }
                         },
                         getApplicationContext(),
-                        FavoritesMoviesTask.DELETE_ACTION
+                        FavoriteMoviesTask.DELETE_ACTION
                 );
-                deleteFavoritesMoviesTask.execute(favoritesAndGenre);
+                deleteFavoriteMoviesTask.execute(favoriteMovies);
             }
         }
 
@@ -231,7 +236,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
             Serializable serializable = savedInstanceState.getSerializable(FAVORITES_MOVIE_KEY);
             try {
                 if (serializable != null) {
-                    favoritesMovie = (FavoritesMovies) serializable;
+                    favoriteMovie = (FavoriteMovies) serializable;
                     showMovie();
                 } else {
                     getMovieDetails(id);
@@ -298,16 +303,16 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     }
 
     private void getFavorites(int id) {
-        Favorites item = new Favorites();
+        Favorite item = new Favorite();
         item.setId(id);
-        getFavoritesTask = new FavoritesTask(new FavoritesTask.AsyncListMoviesResult() {
+        getFavoriteTask = new FavoriteTask(new FavoriteTask.AsyncListMoviesResult() {
             @Override
             public void onPreExecute() {
                 mFavoriteButton.setText(getString(R.string.please_wait));
             }
 
             @Override
-            public void onPostExecute(Favorites result) {
+            public void onPostExecute(Favorite result) {
                 if (result != null) {
                     mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
                 } else {
@@ -315,8 +320,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                 }
                 favoritesButtonText = mFavoriteButton.getText().toString();
             }
-        }, getApplicationContext(), FavoritesTask.GET_ACTION);
-        getFavoritesTask.execute(item);
+        }, getApplicationContext(), FavoriteTask.GET_ACTION);
+        getFavoriteTask.execute(item);
     }
 
     private void getMovieDetails(int id) {
@@ -329,19 +334,19 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
     }
 
     private void showMovie() {
-        if (favoritesMovie != null && favoritesMovie.favorites != null) {
-            Bitmap bmp = BitmapFactory.decodeByteArray(favoritesMovie.favorites.getImage(),
+        if (favoriteMovie != null && favoriteMovie.favorite != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(favoriteMovie.favorite.getImage(),
                     0,
-                    favoritesMovie.favorites.getImage().length);
+                    favoriteMovie.favorite.getImage().length);
             mPosterImageView.setImageBitmap(bmp);
-            mTitleTextView.setText(favoritesMovie.favorites.getTitle());
-            float rated = favoritesMovie.favorites.getVoteAverage();
+            mTitleTextView.setText(favoriteMovie.favorite.getTitle());
+            float rated = favoriteMovie.favorite.getVoteAverage();
             mRatedTextView.setText(String.valueOf(rated) + "/10");
-            mReleaseDateTextView.setText(favoritesMovie.favorites.getReleaseDate().split("-")[0]);
-            mOverviewTextView.setText(favoritesMovie.favorites.getOverview());
-            mDurationTextView.setText(favoritesMovie.favorites.getDuration() + "min");
+            mReleaseDateTextView.setText(favoriteMovie.favorite.getReleaseDate().split("-")[0]);
+            mOverviewTextView.setText(favoriteMovie.favorite.getOverview());
+            mDurationTextView.setText(favoriteMovie.favorite.getDuration() + "min");
             List<Genres> genres = new ArrayList<>();
-            for (Genre item : favoritesMovie.genres) {
+            for (Genre item : favoriteMovie.genres) {
                 genres.add(new Genres(item.getId(), item.getName()));
             }
             ListChipAdapter listGenreAdapter = new ListChipAdapter(genres);
@@ -387,8 +392,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         if (movie != null) {
             outState.putSerializable(MOVIE_KEY, movie);
         }
-        if (favoritesMovie != null && favoritesMovie.favorites != null) {
-            outState.putSerializable(FAVORITES_MOVIE_KEY, favoritesMovie);
+        if (favoriteMovie != null && favoriteMovie.favorite != null) {
+            outState.putSerializable(FAVORITES_MOVIE_KEY, favoriteMovie);
         }
         if (favoritesButtonText != null && favoritesButtonText != "") {
             outState.putString(FAVORITES_KEY, favoritesButtonText);

@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.example.popularmovies.adapters.ListMoviesAdapter;
 import com.example.popularmovies.databse.AppDatabase;
-import com.example.popularmovies.databse.FavoritesMovies;
+import com.example.popularmovies.databse.FavoriteMovies;
 import com.example.popularmovies.models.ListMovies;
 import com.example.popularmovies.models.SortedMovies;
 import com.example.popularmovies.tasks.ListMoviesTask;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements
     private ListMoviesTask listMoviesTask;
     private String filterListMovies;
     private AppDatabase mAppDatabase;
-    private List<FavoritesMovies> listFavoritesMovies;
+    private List<FavoriteMovies> listFavoriteMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,18 +154,18 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initDatabase() {
-        LiveData<List<FavoritesMovies>> liveData = mAppDatabase.favoritesMoviesDao().loadAllFavoritesMovies();
+        LiveData<List<FavoriteMovies>> liveData = mAppDatabase.favoriteMoviesDao().loadListFavoriteMovies();
         liveData.observe(
                 this,
-                new Observer<List<FavoritesMovies>>() {
+                new Observer<List<FavoriteMovies>>() {
                     @Override
-                    public void onChanged(List<FavoritesMovies> result) {
-                        listFavoritesMovies = result;
+                    public void onChanged(List<FavoriteMovies> result) {
+                        listFavoriteMovies = result;
                         if (filterListMovies.equals(getString(R.string.favorite_value))) {
                             List<ListMovies> list = new ArrayList<>();
-                            for (FavoritesMovies item : listFavoritesMovies
+                            for (FavoriteMovies item : listFavoriteMovies
                             ) {
-                                list.add(new ListMovies(item.favorites.getId(), item.favorites.getPosterPath()));
+                                list.add(new ListMovies(item.favorite.getId(), item.favorite.getPosterPath()));
                             }
                             if (!list.equals(listMovies)) {
                                 listMovies = list;
@@ -185,12 +185,12 @@ public class MainActivity extends AppCompatActivity implements
         cancelTask();
         if (sortedMovies == SortedMovies.Favorite
         ) {
-            if (listFavoritesMovies != null
-                    && listFavoritesMovies.size() > 0) {
+            if (listFavoriteMovies != null
+                    && listFavoriteMovies.size() > 0) {
                 List<ListMovies> list = new ArrayList<>();
-                for (FavoritesMovies item : listFavoritesMovies
+                for (FavoriteMovies item : listFavoriteMovies
                 ) {
-                    list.add(new ListMovies(item.favorites.getId(), item.favorites.getPosterPath()));
+                    list.add(new ListMovies(item.favorite.getId(), item.favorite.getPosterPath()));
                 }
                 if (!listMovies.equals(list)) {
                     listMovies = list;
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onListItemClick(int position) {
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
         if (filterListMovies.equals(getString(R.string.favorite_value))) {
-            intent.putExtra(FAVORITES_EXTRA_KEY, MainActivity.this.listFavoritesMovies.get(position));
+            intent.putExtra(FAVORITES_EXTRA_KEY, MainActivity.this.listFavoriteMovies.get(position));
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, MainActivity.this.listMovies.get(position).getId());
         }

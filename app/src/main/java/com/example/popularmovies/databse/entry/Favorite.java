@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity(tableName = "favorites")
-public class Favorites implements Serializable {
+@Entity(tableName = "favorite")
+public class Favorite implements Serializable {
 
     @PrimaryKey
     private int id;
@@ -32,10 +32,10 @@ public class Favorites implements Serializable {
     private byte[] image;
 
     @Ignore
-    public Favorites() {
+    public Favorite() {
     }
 
-    public Favorites(int id,
+    public Favorite(int id,
                      String title,
                      String posterPath,
                      String overview,

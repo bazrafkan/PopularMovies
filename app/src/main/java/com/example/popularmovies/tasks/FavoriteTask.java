@@ -4,9 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.popularmovies.databse.AppDatabase;
-import com.example.popularmovies.databse.entry.Favorites;
+import com.example.popularmovies.databse.entry.Favorite;
 
-public class FavoritesTask extends AsyncTask<Favorites, Void, Favorites> {
+public class FavoriteTask extends AsyncTask<Favorite, Void, Favorite> {
     public final static String INSERT_ACTION = "insert_to_favorites";
     public final static String DELETE_ACTION = "delete_from_favorites";
     public final static String GET_ACTION = "get_from_favorites";
@@ -16,12 +16,12 @@ public class FavoritesTask extends AsyncTask<Favorites, Void, Favorites> {
     public interface AsyncListMoviesResult {
         void onPreExecute();
 
-        void onPostExecute(Favorites result);
+        void onPostExecute(Favorite result);
     }
 
     public AsyncListMoviesResult delegate;
 
-    public FavoritesTask(AsyncListMoviesResult delegate, Context context, String action) {
+    public FavoriteTask(AsyncListMoviesResult delegate, Context context, String action) {
         this.delegate = delegate;
         this.context = context;
         this.action = action;
@@ -34,24 +34,24 @@ public class FavoritesTask extends AsyncTask<Favorites, Void, Favorites> {
     }
 
     @Override
-    protected Favorites doInBackground(Favorites... favorites) {
+    protected Favorite doInBackground(Favorite... favorites) {
         AppDatabase mAppDatabase = AppDatabase.getInstance(context);
         if (action == INSERT_ACTION) {
-            mAppDatabase.favoritesDao().insertFavorites(favorites[0]);
-            return mAppDatabase.favoritesDao().getFavorites(favorites[0].getId());
+            mAppDatabase.favoriteDao().insertFavorite(favorites[0]);
+            return mAppDatabase.favoriteDao().getFavorite(favorites[0].getId());
         }
         if (action == DELETE_ACTION) {
-            mAppDatabase.favoritesDao().deleteFavorites(favorites[0]);
-            return mAppDatabase.favoritesDao().getFavorites(favorites[0].getId());
+            mAppDatabase.favoriteDao().deleteFavorite(favorites[0]);
+            return mAppDatabase.favoriteDao().getFavorite(favorites[0].getId());
         }
         if (action == GET_ACTION) {
-            return mAppDatabase.favoritesDao().getFavorites(favorites[0].getId());
+            return mAppDatabase.favoriteDao().getFavorite(favorites[0].getId());
         }
         return null;
     }
 
     @Override
-    protected void onPostExecute(Favorites result) {
+    protected void onPostExecute(Favorite result) {
         delegate.onPostExecute(result);
     }
 }
