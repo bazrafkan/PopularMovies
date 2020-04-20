@@ -10,6 +10,7 @@ import androidx.room.Transaction;
 import com.example.popularmovies.databse.FavoriteMovies;
 import com.example.popularmovies.databse.entry.Favorite;
 import com.example.popularmovies.databse.entry.Genre;
+import com.example.popularmovies.databse.entry.Review;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface FavoriteMoviesDao {
     FavoriteMovies getFavoriteMovies(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertFavoriteMovies(Favorite favorite, List<Genre> genres);
+    void insertFavoriteMovies(Favorite favorite, List<Genre> genres, List<Review> reviews);
 
     @Query("DELETE FROM favorite WHERE favorite.id = :id")
     void deleteFavoriteMovies(int id);
