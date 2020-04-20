@@ -332,7 +332,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                 }
                 favoritesButtonText = mFavoriteButton.getText().toString();
             }
-        }, getApplicationContext(), FavoriteTask.GET_ACTION);
+        }, getApplicationContext());
         getFavoriteTask.execute(item);
     }
 
