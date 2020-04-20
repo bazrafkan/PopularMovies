@@ -4,9 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.popularmovies.databse.AppDatabase;
-import com.example.popularmovies.databse.entry.FavoritesAndGenre;
+import com.example.popularmovies.databse.FavoritesMovies;
 
-public class FavoritesAndGenreTask extends AsyncTask<FavoritesAndGenre, Void, FavoritesAndGenre> {
+public class FavoritesMoviesTask extends AsyncTask<FavoritesMovies, Void, FavoritesMovies> {
     public final static String INSERT_ACTION = "insert_to_favorites_genre";
     public final static String DELETE_ACTION = "delete_from_favorites_genre";
     public final static String GET_ACTION = "get_from_favorites_genre";
@@ -16,12 +16,12 @@ public class FavoritesAndGenreTask extends AsyncTask<FavoritesAndGenre, Void, Fa
     public interface AsyncFavoritesAndGenreTaskResult {
         void onPreExecute();
 
-        void onPostExecute(FavoritesAndGenre result);
+        void onPostExecute(FavoritesMovies result);
     }
 
     public AsyncFavoritesAndGenreTaskResult delegate;
 
-    public FavoritesAndGenreTask(AsyncFavoritesAndGenreTaskResult delegate, Context context, String action) {
+    public FavoritesMoviesTask(AsyncFavoritesAndGenreTaskResult delegate, Context context, String action) {
         this.delegate = delegate;
         this.context = context;
         this.action = action;
@@ -34,26 +34,26 @@ public class FavoritesAndGenreTask extends AsyncTask<FavoritesAndGenre, Void, Fa
     }
 
     @Override
-    protected FavoritesAndGenre doInBackground(FavoritesAndGenre... favoritesAndGenres) {
+    protected FavoritesMovies doInBackground(FavoritesMovies... favoritesMovies) {
         AppDatabase mAppDatabase = AppDatabase.getInstance(context);
-        FavoritesAndGenre item = favoritesAndGenres[0];
-        int id = favoritesAndGenres[0].favorites.getId();
+        FavoritesMovies item = favoritesMovies[0];
+        int id = item.favorites.getId();
         if (action == INSERT_ACTION) {
-            mAppDatabase.favoritesAndGenreDao().insertFavoritesWithGenre(item.favorites, item.genres);
-            return mAppDatabase.favoritesAndGenreDao().getFavoritesAndGenre(id);
+            mAppDatabase.favoritesMoviesDao().insertFavoritesMovies(item.favorites, item.genres);
+            return mAppDatabase.favoritesMoviesDao().getFavoritesMovies(id);
         }
         if (action == DELETE_ACTION) {
-            mAppDatabase.favoritesAndGenreDao().deleteFavoritesWithGenre(id);
-            return mAppDatabase.favoritesAndGenreDao().getFavoritesAndGenre(id);
+            mAppDatabase.favoritesMoviesDao().deleteFavoritesMovies(id);
+            return mAppDatabase.favoritesMoviesDao().getFavoritesMovies(id);
         }
         if (action == GET_ACTION) {
-            return mAppDatabase.favoritesAndGenreDao().getFavoritesAndGenre(id);
+            return mAppDatabase.favoritesMoviesDao().getFavoritesMovies(id);
         }
         return null;
     }
 
     @Override
-    protected void onPostExecute(FavoritesAndGenre result) {
+    protected void onPostExecute(FavoritesMovies result) {
         delegate.onPostExecute(result);
     }
 }

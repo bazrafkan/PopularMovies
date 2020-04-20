@@ -8,8 +8,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.example.popularmovies.databse.dao.FavoritesAndGenreDao;
 import com.example.popularmovies.databse.dao.FavoritesDao;
+import com.example.popularmovies.databse.dao.FavoritesMoviesDao;
 import com.example.popularmovies.databse.dao.GenreDao;
 import com.example.popularmovies.databse.entry.Favorites;
 import com.example.popularmovies.databse.entry.Genre;
@@ -41,5 +41,5 @@ public abstract class AppDatabase extends RoomDatabase {
 
     abstract public GenreDao genreDao();
 
-    abstract public FavoritesAndGenreDao favoritesAndGenreDao();
+    abstract public FavoritesMoviesDao favoritesMoviesDao();
 }
