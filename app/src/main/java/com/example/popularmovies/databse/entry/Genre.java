@@ -14,7 +14,7 @@ public class Genre implements Serializable {
     @PrimaryKey
     private int id;
 
-    private int favoritesId;
+    private int favoriteId;
 
     private String name;
 
@@ -23,9 +23,9 @@ public class Genre implements Serializable {
     }
 
     @Ignore
-    public Genre(Genres genres, int favoritesId) {
+    public Genre(Genres genres, int favoriteId) {
         this.id = genres.getId();
-        this.favoritesId = favoritesId;
+        this.favoriteId = favoriteId;
         this.name = genres.getName();
     }
 
@@ -35,9 +35,9 @@ public class Genre implements Serializable {
         this.name = genres.getName();
     }
 
-    public Genre(int id, int favoritesId, String name) {
+    public Genre(int id, int favoriteId, String name) {
         this.id = id;
-        this.favoritesId = favoritesId;
+        this.favoriteId = favoriteId;
         this.name = name;
     }
 
@@ -45,8 +45,8 @@ public class Genre implements Serializable {
         return id;
     }
 
-    public int getFavoritesId() {
-        return favoritesId;
+    public int getFavoriteId() {
+        return favoriteId;
     }
 
     public String getName() {
@@ -57,8 +57,8 @@ public class Genre implements Serializable {
         this.id = id;
     }
 
-    public void setFavoritesId(int favoritesId) {
-        this.favoritesId = favoritesId;
+    public void setFavoriteId(int favoriteId) {
+        this.favoriteId = favoriteId;
     }
 
     public void setName(String name) {

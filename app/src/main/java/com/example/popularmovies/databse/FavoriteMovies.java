@@ -13,6 +13,6 @@ public class FavoriteMovies implements Serializable {
     @Embedded
     public Favorite favorite;
 
-    @Relation(parentColumn = "id", entityColumn = "favoritesId", entity = Genre.class)
+    @Relation(parentColumn = "id", entityColumn = "favoriteId", entity = Genre.class)
     public List<Genre> genres;
 }
