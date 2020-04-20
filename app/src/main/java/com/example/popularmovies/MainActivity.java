@@ -20,8 +20,7 @@ import android.widget.TextView;
 
 import com.example.popularmovies.adapters.ListMoviesAdapter;
 import com.example.popularmovies.databse.AppDatabase;
-import com.example.popularmovies.databse.entry.Favorites;
-import com.example.popularmovies.databse.entry.FavoritesAndGenre;
+import com.example.popularmovies.databse.FavoritesMovies;
 import com.example.popularmovies.models.ListMovies;
 import com.example.popularmovies.models.SortedMovies;
 import com.example.popularmovies.tasks.ListMoviesTask;
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements
         ListMoviesTask.AsyncListMoviesResult {
     private static final String LIST_MOVIES_KEY = "listMovies";
     private static final String FILTER_LIST_MOVIES_KEY = "filter_listMovies";
+    public static final String FAVORITES_EXTRA_KEY = "favorites_extra_key";
     private TextView mEmptyMoviesTextView;
     private ProgressBar mLoadingProgressBar;
     private RecyclerView mListMovies;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements
     private ListMoviesTask listMoviesTask;
     private String filterListMovies;
     private AppDatabase mAppDatabase;
-    private List<FavoritesAndGenre> listFavorites;
+    private List<FavoritesMovies> listFavoritesMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,16 +154,16 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initDatabase() {
-        LiveData<List<FavoritesAndGenre>> liveData = mAppDatabase.favoritesAndGenreDao().loadAllFavoritesAndGenre();
+        LiveData<List<FavoritesMovies>> liveData = mAppDatabase.favoritesMoviesDao().loadAllFavoritesMovies();
         liveData.observe(
                 this,
-                new Observer<List<FavoritesAndGenre>>() {
+                new Observer<List<FavoritesMovies>>() {
                     @Override
-                    public void onChanged(List<FavoritesAndGenre> result) {
-                        listFavorites = result;
+                    public void onChanged(List<FavoritesMovies> result) {
+                        listFavoritesMovies = result;
                         if (filterListMovies.equals(getString(R.string.favorite_value))) {
                             List<ListMovies> list = new ArrayList<>();
-                            for (FavoritesAndGenre item : listFavorites
+                            for (FavoritesMovies item : listFavoritesMovies
                             ) {
                                 list.add(new ListMovies(item.favorites.getId(), item.favorites.getPosterPath()));
                             }
@@ -185,10 +185,10 @@ public class MainActivity extends AppCompatActivity implements
         cancelTask();
         if (sortedMovies == SortedMovies.Favorite
         ) {
-            if (listFavorites != null
-                    && listFavorites.size() > 0) {
+            if (listFavoritesMovies != null
+                    && listFavoritesMovies.size() > 0) {
                 List<ListMovies> list = new ArrayList<>();
-                for (FavoritesAndGenre item : listFavorites
+                for (FavoritesMovies item : listFavoritesMovies
                 ) {
                     list.add(new ListMovies(item.favorites.getId(), item.favorites.getPosterPath()));
                 }
@@ -240,7 +240,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onListItemClick(int position) {
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(Intent.EXTRA_TEXT, MainActivity.this.listMovies.get(position).getId());
+        if (filterListMovies.equals(getString(R.string.favorite_value))) {
+            intent.putExtra(FAVORITES_EXTRA_KEY, MainActivity.this.listFavoritesMovies.get(position));
+        } else {
+            intent.putExtra(Intent.EXTRA_TEXT, MainActivity.this.listMovies.get(position).getId());
+        }
         startActivity(intent);
     }
 
