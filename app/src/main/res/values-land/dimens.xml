@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="details_activity_bar_layout_height">100dp</dimen>
+    <dimen name="details_activity_title_textSize">35sp</dimen>
+    <dimen name="details_activity_release_layout_marginEnd">16dp</dimen>
+    <dimen name="details_activity_release_layout_marginRight">16dp</dimen>
+    <dimen name="genre_list_layout_height">36dp</dimen>
+</resources>

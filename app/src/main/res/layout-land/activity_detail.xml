@@ -13,7 +13,7 @@
         <View
             android:id="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="@dimen/details_activity_bar_layout_height"
             android:background="@color/colorAccent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,33 +21,20 @@
             android:id="@+id/tv_title_movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="@dimen/details_activity_title_layout_marginLeft"
+            android:layout_marginStart="@dimen/details_activity_title_layout_marginLeft"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/title_movie_textSize"
+            android:textSize="@dimen/details_activity_title_textSize"
             app:layout_constraintBottom_toBottomOf="@+id/view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Chappie" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_genres_movie"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_image_detail" />
+            tools:text="World" />
 
         <ImageView
             android:id="@+id/iv_image_detail"
-            android:layout_width="150dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/details_activity_image_layout_width"
+            android:layout_height="@dimen/details_activity_image_layout_height"
+            android:layout_marginTop="@dimen/details_activity_image_layout_marginTop"
             android:adjustViewBounds="true"
             android:background="@android:color/black"
             android:contentDescription="@string/poster"
@@ -66,39 +53,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view" />
 
-        <Button
-            android:id="@+id/bn_change_favorite_movie"
-            android:layout_width="80dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorAccentLight"
-            android:text="@string/mark_as_favorite"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_release_date_movie"
-            app:layout_constraintTop_toBottomOf="@+id/tv_rated_movie" />
-
         <TextView
             android:id="@+id/tv_release_date_movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="@dimen/details_activity_release_layout_marginEnd"
+            android:layout_marginRight="@dimen/details_activity_release_layout_marginRight"
             android:textColor="@android:color/darker_gray"
-            android:textSize="24sp"
+            android:textSize="@dimen/details_activity_release_textSize"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toEndOf="@+id/iv_image_detail"
-            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintTop_toTopOf="@+id/iv_image_detail"
             tools:text="2015" />
 
         <TextView
             android:id="@+id/tv_duration_movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/details_activity_duration_layout_marginTop"
             android:textColor="@android:color/darker_gray"
-            android:textSize="20sp"
+            android:textSize="@dimen/details_activity_duration_textSize"
             app:layout_constraintStart_toStartOf="@+id/tv_release_date_movie"
             app:layout_constraintTop_toBottomOf="@+id/tv_release_date_movie"
             tools:text="120min" />
@@ -107,12 +81,36 @@
             android:id="@+id/tv_rated_movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/details_activity_rated_layout_marginTop"
             android:textColor="@android:color/black"
-            android:textSize="14sp"
+            android:textSize="@dimen/details_activity_rated_textSize"
             app:layout_constraintStart_toStartOf="@+id/tv_release_date_movie"
             app:layout_constraintTop_toBottomOf="@+id/tv_duration_movie"
             tools:text="8.1/10" />
+
+        <Button
+            android:id="@+id/bn_change_favorite_movie"
+            android:layout_width="@dimen/details_activity_favorite_bn_layout_width"
+            android:layout_height="@dimen/details_activity_favorite_bn_layout_height"
+            android:layout_marginTop="@dimen/details_activity_favorite_bn_layout_marginTop"
+            android:background="@color/colorAccentLight"
+            android:text="@string/mark_as_favorite"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/details_activity_favorite_bn_textSize"
+            app:layout_constraintStart_toStartOf="@+id/tv_release_date_movie"
+            app:layout_constraintTop_toBottomOf="@+id/tv_rated_movie" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_genres_movie"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/genre_list_layout_height"
+            android:layout_marginStart="@dimen/details_activity_genres_layout_margin"
+            android:layout_marginLeft="@dimen/details_activity_genres_layout_margin"
+            android:layout_marginEnd="@dimen/details_activity_genres_layout_margin"
+            android:layout_marginRight="@dimen/details_activity_genres_layout_margin"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image_detail" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -124,7 +122,6 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="1dp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -141,8 +138,8 @@
                     android:id="@+id/tv_overview_movie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingLeft="@dimen/details_activity_overview_padding"
+                    android:paddingRight="@dimen/details_activity_overview_padding"
                     android:textSize="@dimen/overview_movie_textSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -154,8 +151,7 @@
                     layout="@layout/trailers_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/details_activity_trailers_layout_marginTop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_overview_movie" />
@@ -165,8 +161,8 @@
                     layout="@layout/reviews_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="@dimen/details_activity_reviews_layout_marginTop"
+                    android:layout_marginBottom="@dimen/details_activity_reviews_layout_marginBottom"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/in_trailers_list" />

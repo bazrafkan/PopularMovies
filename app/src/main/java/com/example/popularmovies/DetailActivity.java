@@ -278,10 +278,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
             mDurationTextView.setText(selectedMovie.movie.getDuration() + "min");
             ListGenreAdapter listGenreAdapter = new ListGenreAdapter(selectedMovie.genres);
             mGenresList.setAdapter(listGenreAdapter);
-        } else {
-            //TODO show empty
         }
-
     }
 
     private void showListVideos() {
@@ -386,10 +383,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://www.youtube.com/watch?v=" + youtubeId));
         try {
-            // Try in Youtube app
             this.startActivity(appIntent);
         } catch (ActivityNotFoundException ex) {
-            // Try in Youtube web site
             this.startActivity(webIntent);
         }
     }
