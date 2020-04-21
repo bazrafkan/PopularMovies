@@ -107,6 +107,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
             try {
                 selectedMovie = (FavoriteMovies) serializable;
                 showMovie();
+                showListReviews();
+                showListVideos();
             } catch (Exception e) {
                 getInitMovieDetails(savedInstanceState, intent);
             }
@@ -212,6 +214,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                 if (serializable != null) {
                     this.selectedMovie = (FavoriteMovies) serializable;
                     showMovie();
+                    showListVideos();
+                    showListReviews();
                 } else {
                     getMovieDetails(id);
                 }
@@ -263,7 +267,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
                 mPosterImageView.setImageBitmap(bmp);
             } else {
                 Picasso.with(DetailActivity.this)
-                        .load(selectedMovie.movie.getPosterPath())
+                        .load(selectedMovie.movie.getPosterPathCompleted())
                         .into(mPosterImageView);
             }
             mTitleTextView.setText(selectedMovie.movie.getTitle());
@@ -357,6 +361,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (result != null) {
             this.selectedMovie.movie = result;
+            this.selectedMovie.genres = result.getGenres();
             showMovie();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this)

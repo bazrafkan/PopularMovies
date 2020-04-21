@@ -103,11 +103,11 @@ public class Movie implements Serializable {
     }
 
     public String getPosterPath() {
-        return IMAGE_PATH + IMAGE_SIZE + posterPath;
+        return posterPath;
     }
 
-    public String getOriginalPosterPath() {
-        return posterPath;
+    public String getPosterPathCompleted() {
+        return IMAGE_PATH + IMAGE_SIZE + posterPath;
     }
 
     public String getOverview() {
