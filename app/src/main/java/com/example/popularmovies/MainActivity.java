@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.example.popularmovies.adapters.ListMoviesAdapter;
 import com.example.popularmovies.databse.AppDatabase;
 import com.example.popularmovies.databse.FavoriteMovies;
-import com.example.popularmovies.models.ListMovies;
 import com.example.popularmovies.models.SortedMovies;
 import com.example.popularmovies.tasks.ListMoviesTask;
 
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements
     private TextView mEmptyMoviesTextView;
     private ProgressBar mLoadingProgressBar;
     private RecyclerView mListMovies;
-    private List<ListMovies> listMovies;
+    private List<FavoriteMovies> listMovies;
     private ListMoviesTask listMoviesTask;
     private String filterListMovies;
     private AppDatabase mAppDatabase;
@@ -68,12 +67,12 @@ public class MainActivity extends AppCompatActivity implements
     private void checkListMovies(Bundle savedInstanceState) {
         if (savedInstanceState.containsKey(LIST_MOVIES_KEY)) {
             Serializable serializable = savedInstanceState.getSerializable(LIST_MOVIES_KEY);
-            ArrayList<ListMovies> list = new ArrayList<>();
+            ArrayList<FavoriteMovies> list = new ArrayList<>();
             try {
                 ArrayList tempList = (ArrayList) serializable;
                 if (tempList != null && tempList.size() > 0) {
                     for (int i = 0; i < tempList.size(); i++) {
-                        list.add(i, (ListMovies) tempList.get(i));
+                        list.add(i, (FavoriteMovies) tempList.get(i));
                     }
                     listMovies = new ArrayList<>(list);
                     showListMovies();
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         if (listMovies != null && listMovies.size() > 0) {
-            ArrayList<ListMovies> arrayList = new ArrayList<>(listMovies);
+            ArrayList<FavoriteMovies> arrayList = new ArrayList<>(listMovies);
             outState.putSerializable(LIST_MOVIES_KEY, arrayList);
         }
         outState.putString(FILTER_LIST_MOVIES_KEY, filterListMovies);
@@ -162,13 +161,8 @@ public class MainActivity extends AppCompatActivity implements
                     public void onChanged(List<FavoriteMovies> result) {
                         listFavoriteMovies = result;
                         if (filterListMovies.equals(getString(R.string.favorite_value))) {
-                            List<ListMovies> list = new ArrayList<>();
-                            for (FavoriteMovies item : listFavoriteMovies
-                            ) {
-                                list.add(new ListMovies(item.movie.getId(), item.movie.getPosterPath()));
-                            }
-                            if (!list.equals(listMovies)) {
-                                listMovies = list;
+                            if (listMovies == null || !listFavoriteMovies.equals(listMovies)) {
+                                listMovies = listFavoriteMovies;
                                 if (listMovies != null && listMovies.size() > 0) {
                                     showListMovies();
                                 } else {
@@ -187,13 +181,8 @@ public class MainActivity extends AppCompatActivity implements
         ) {
             if (listFavoriteMovies != null
                     && listFavoriteMovies.size() > 0) {
-                List<ListMovies> list = new ArrayList<>();
-                for (FavoriteMovies item : listFavoriteMovies
-                ) {
-                    list.add(new ListMovies(item.movie.getId(), item.movie.getPosterPath()));
-                }
-                if (!listMovies.equals(list)) {
-                    listMovies = list;
+                if (listMovies == null || !listMovies.equals(listFavoriteMovies)) {
+                    listMovies = listFavoriteMovies;
                     if (listMovies != null && listMovies.size() > 0) {
                         showListMovies();
                     } else {
@@ -243,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements
         if (filterListMovies.equals(getString(R.string.favorite_value))) {
             intent.putExtra(FAVORITES_EXTRA_KEY, MainActivity.this.listFavoriteMovies.get(position));
         } else {
-            intent.putExtra(Intent.EXTRA_TEXT, MainActivity.this.listMovies.get(position).getId());
+            intent.putExtra(Intent.EXTRA_TEXT, MainActivity.this.listMovies.get(position).movie.getId());
         }
         startActivity(intent);
     }
@@ -255,10 +244,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onPostExecute(List<ListMovies> result) {
+    public void onPostExecute(List<FavoriteMovies> result) {
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         if (result != null && result.size() > 0) {
-            MainActivity.this.listMovies = result;
+            this.listMovies = result;
             showListMovies();
         } else {
             showEmptyListMovies();

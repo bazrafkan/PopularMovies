@@ -1,5 +1,6 @@
 package com.example.popularmovies.databse;
 
+import androidx.annotation.Nullable;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
@@ -24,4 +25,21 @@ public class FavoriteMovies implements Serializable {
 
     @Relation(parentColumn = "id", entityColumn = "favoriteId", entity = Video.class)
     public List<Video> videos;
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null && this == null) {
+            return true;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        } else {
+            FavoriteMovies method = (FavoriteMovies) obj;
+            if (this.movie.getId() == method.movie.getId()
+                    && this.movie.getPosterPath().equals(method.movie.getPosterPath())) {
+                return true;
+            }
+            return false;
+        }
+    }
 }

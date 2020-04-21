@@ -1,6 +1,8 @@
 package com.example.popularmovies.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,21 +13,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.popularmovies.R;
-import com.example.popularmovies.models.ListMovies;
+import com.example.popularmovies.databse.FavoriteMovies;
+import com.example.popularmovies.databse.entry.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class ListMoviesAdapter extends RecyclerView.Adapter<ListMoviesAdapter.ImageViewHolder> {
     private static final String TAG = ListMoviesAdapter.class.getSimpleName();
-    private List<ListMovies> listMovies;
+    private List<FavoriteMovies> listMovies;
     final private ListItemClickListener listener;
 
     public interface ListItemClickListener {
         void onListItemClick(int id);
     }
 
-    public ListMoviesAdapter(List<ListMovies> listMovies, ListItemClickListener listener) {
+    public ListMoviesAdapter(List<FavoriteMovies> listMovies, ListItemClickListener listener) {
         this.listMovies = listMovies;
         this.listener = listener;
     }
@@ -43,8 +46,7 @@ public class ListMoviesAdapter extends RecyclerView.Adapter<ListMoviesAdapter.Im
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-
-        holder.bind(listMovies.get(position).getPosterPath());
+        holder.bind(listMovies.get(position).movie);
     }
 
     @Override
@@ -72,12 +74,20 @@ public class ListMoviesAdapter extends RecyclerView.Adapter<ListMoviesAdapter.Im
             listener.onListItemClick(getAdapterPosition());
         }
 
-        void bind(String path) {
-            Log.d(TAG, "path: "
-                    + path);
-            Picasso.with(context)
-                    .load(path)
-                    .into(mItemImage);
+        void bind(Movie movie) {
+            if (movie.getImage() != null && movie.getImage().length > 0) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(movie.getImage(),
+                        0,
+                        movie.getImage().length);
+                mItemImage.setImageBitmap(bmp);
+            } else {
+                Log.d(TAG, "path: "
+                        + movie.getPosterPathCompleted());
+                Picasso.with(context)
+                        .load(movie.getPosterPathCompleted())
+                        .into(mItemImage);
+            }
+
         }
 
     }
