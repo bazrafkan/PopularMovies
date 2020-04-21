@@ -28,7 +28,14 @@ public class ListReviewsTask extends AsyncTask<Integer, Void, List<Review>> {
 
     @Override
     protected List<Review> doInBackground(Integer... integers) {
-        return DetailsReviews.getDetailsReviews(integers[0]);
+        int id = integers[0];
+        List<Review> reviews = DetailsReviews.getDetailsReviews(id);
+        if (reviews != null && reviews.size() > 0) {
+            for (int i = 0; i < reviews.size(); i++) {
+                reviews.get(i).setFavoriteId(id);
+            }
+        }
+        return reviews;
     }
 
 
