@@ -28,7 +28,14 @@ public class ListVideosTask extends AsyncTask<Integer, Void, List<Video>> {
 
     @Override
     protected List<Video> doInBackground(Integer... integers) {
-        return DetailsVideos.getDetailsVideos(integers[0]);
+        int id = integers[0];
+        List<Video> videos = DetailsVideos.getDetailsVideos(id);
+        if (videos != null && videos.size() > 0) {
+            for (int i = 0; i < videos.size(); i++) {
+                videos.get(i).setFavoriteId(id);
+            }
+        }
+        return videos;
     }
 
 
