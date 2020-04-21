@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements
         mEmptyMoviesTextView = findViewById(R.id.tv_empty_message);
         mLoadingProgressBar = findViewById(R.id.pb_loading_indicator);
         mListMovies = findViewById(R.id.rv_list_movies);
+
         mAppDatabase = AppDatabase.getInstance(getApplicationContext());
         GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
         mListMovies.setLayoutManager(layoutManager);
@@ -177,8 +178,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void makeListMovies(SortedMovies sortedMovies) {
         cancelTask();
-        if (sortedMovies == SortedMovies.Favorite
-        ) {
+        if (sortedMovies == SortedMovies.Favorite) {
             if (listFavoriteMovies != null
                     && listFavoriteMovies.size() > 0) {
                 if (listMovies == null || !listMovies.equals(listFavoriteMovies)) {
