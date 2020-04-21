@@ -7,9 +7,10 @@ import com.example.popularmovies.models.DetailsReviews;
 
 import java.util.List;
 
-public class ListReviewsTask extends AsyncTask<Integer,Void, List<Review>> {
+public class ListReviewsTask extends AsyncTask<Integer, Void, List<Review>> {
     public interface AsyncReviewTaskResult {
         void onPreExecute();
+
         void onPostExecuteListReviews(List<Review> result);
     }
 

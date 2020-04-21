@@ -53,7 +53,6 @@ public class ListMoviesAdapter extends RecyclerView.Adapter<ListMoviesAdapter.Im
             return listMovies.size();
         } else {
             return 0;
-
         }
     }
 

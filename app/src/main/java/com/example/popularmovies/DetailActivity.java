@@ -138,7 +138,7 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
 
     private void changeFavoritesList(int id) {
         if (selectedMovie.movie != null && id != 0) {
-            selectedMovie.genres=selectedMovie.movie.getGenres();
+            selectedMovie.genres = selectedMovie.movie.getGenres();
             if (mFavoriteButton.getText().equals(getString(R.string.mark_as_favorite))) {
                 if (selectedMovie.movie.getImage() == null || selectedMovie.movie.getImage().length == 0) {
                     Drawable d = mPosterImageView.getDrawable();

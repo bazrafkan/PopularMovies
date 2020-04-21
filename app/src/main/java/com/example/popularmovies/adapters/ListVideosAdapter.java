@@ -54,7 +54,7 @@ public class ListVideosAdapter extends RecyclerView.Adapter<ListVideosAdapter.It
         this.listener = listener;
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mItemText;
 
         public ItemViewHolder(@NonNull View itemView) {
