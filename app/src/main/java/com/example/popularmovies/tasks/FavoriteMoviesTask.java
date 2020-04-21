@@ -5,6 +5,11 @@ import android.os.AsyncTask;
 
 import com.example.popularmovies.databse.AppDatabase;
 import com.example.popularmovies.databse.FavoriteMovies;
+import com.example.popularmovies.databse.entry.Genre;
+import com.example.popularmovies.databse.entry.Review;
+import com.example.popularmovies.databse.entry.Video;
+
+import java.util.ArrayList;
 
 public class FavoriteMoviesTask extends AsyncTask<FavoriteMovies, Void, FavoriteMovies> {
     public final static String INSERT_ACTION = "insert_to_favorites_genre";
@@ -41,9 +46,9 @@ public class FavoriteMoviesTask extends AsyncTask<FavoriteMovies, Void, Favorite
         if (action == INSERT_ACTION) {
             mAppDatabase.favoriteMoviesDao().insertFavoriteMovies(
                     item.movie,
-                    item.genres,
-                    item.reviews,
-                    item.videos);
+                    item.genres != null ? item.genres : new ArrayList<Genre>(),
+                    item.reviews != null ? item.reviews : new ArrayList<Review>(),
+                    item.videos != null ? item.videos : new ArrayList<Video>());
             return mAppDatabase.favoriteMoviesDao().getFavoriteMovies(id);
         }
         if (action == DELETE_ACTION) {
