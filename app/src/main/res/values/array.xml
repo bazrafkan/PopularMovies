@@ -3,7 +3,7 @@
     <array name="pref_default_filter_labels">
         <item>@string/most_popular</item>
         <item>@string/top_rate</item>
-        <item>@string/movie</item>
+        <item>@string/favorite</item>
     </array>
 
     <array name="pref_default_filter_values">
