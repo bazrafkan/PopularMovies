@@ -12,16 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.popularmovies.R;
-import com.example.popularmovies.models.Reviews;
+import com.example.popularmovies.databse.entry.Review;
 
 import java.util.List;
 
 public class ListReviewsAdapter extends RecyclerView.Adapter<ListReviewsAdapter.ItemViewHolder> {
     private static final String TAG = ListReviewsAdapter.class.getSimpleName();
-    private List<Reviews> listReviews;
+    private List<Review> reviews;
 
-    public ListReviewsAdapter(List<Reviews> listReviews) {
-        this.listReviews = listReviews;
+    public ListReviewsAdapter(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     @NonNull
@@ -36,14 +36,14 @@ public class ListReviewsAdapter extends RecyclerView.Adapter<ListReviewsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        Reviews review = listReviews.get(position);
+        Review review = reviews.get(position);
         holder.bind(review.getAuthor(), review.getContent());
     }
 
     @Override
     public int getItemCount() {
-        if (listReviews != null) {
-            return listReviews.size();
+        if (reviews != null) {
+            return reviews.size();
         } else {
             return 0;
         }
@@ -61,7 +61,6 @@ public class ListReviewsAdapter extends RecyclerView.Adapter<ListReviewsAdapter.
 
         void bind(String author, String content) {
             Log.d(TAG, "author: " + author);
-            Log.d(TAG, "content: " + content);
             mAuthorText.setText(author);
             mContentText.setText(content);
         }

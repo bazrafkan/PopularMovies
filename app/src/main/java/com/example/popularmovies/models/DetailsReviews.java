@@ -1,6 +1,7 @@
 package com.example.popularmovies.models;
 
 import com.example.popularmovies.BuildConfig;
+import com.example.popularmovies.databse.entry.Review;
 import com.example.popularmovies.utils.NetworkUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,9 +21,9 @@ public class DetailsReviews implements Serializable {
     private final static String PARAM_API_KEY = "api_key";
 
     @SerializedName("results")
-    List<Reviews> listReviews = null;
+    List<Review> listReviews = null;
 
-    public static List<Reviews> getDetailsReviews(int id) {
+    public static List<Review> getDetailsReviews(int id) {
         Map<String, String> params = new HashMap<String, String>();
         try {
             params.put(PARAM_API_KEY, BuildConfig.tmdb_api_key);

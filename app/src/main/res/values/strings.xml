@@ -23,11 +23,11 @@
     <string name="movie_detail">MovieDetail</string>
     <string name="pop_movies">Pop Movies</string>
     <string name="top_movies">Top Movies</string>
-    <string name="favorite">Favorite</string>
+    <string name="movie">Favorite</string>
     <string name="favorite_movies">Favorite Movies</string>
     <string name="pref_filter_label">Default Filter</string>
     <string name="pref_filter_key" translatable="false">default_filter</string>
     <string name="most_popular_value" translatable="false">most_popular</string>
     <string name="top_rate_value" translatable="false">top_rate</string>
-    <string name="favorite_value" translatable="false">favorite</string>
+    <string name="favorite_value" translatable="false">movie</string>
 </resources>

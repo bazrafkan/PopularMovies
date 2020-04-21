@@ -1,6 +1,7 @@
 package com.example.popularmovies.models;
 
 import com.example.popularmovies.BuildConfig;
+import com.example.popularmovies.databse.entry.Video;
 import com.example.popularmovies.utils.NetworkUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,15 +21,15 @@ public class DetailsVideos implements Serializable {
     private final static String PARAM_API_KEY = "api_key";
 
     @SerializedName("results")
-    List<Videos> listVideos = null;
+    List<Video> videos = null;
 
-    public static List<Videos> getDetailsVideos(int id) {
+    public static List<Video> getDetailsVideos(int id) {
         Map<String, String> params = new HashMap<String, String>();
         try {
             params.put(PARAM_API_KEY, BuildConfig.tmdb_api_key);
             URL url = NetworkUtils.buildUrl(TMDB_URL + id + TMDB_URL_VIDEO, params);
             String result = NetworkUtils.getResponseFromHttpUrl(url);
-            return parseJSON(result).listVideos;
+            return parseJSON(result).videos;
         } catch (IOException e) {
             e.printStackTrace();
         }

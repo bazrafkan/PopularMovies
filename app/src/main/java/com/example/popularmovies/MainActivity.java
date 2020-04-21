@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements
                             List<ListMovies> list = new ArrayList<>();
                             for (FavoriteMovies item : listFavoriteMovies
                             ) {
-                                list.add(new ListMovies(item.favorite.getId(), item.favorite.getPosterPath()));
+                                list.add(new ListMovies(item.movie.getId(), item.movie.getPosterPath()));
                             }
                             if (!list.equals(listMovies)) {
                                 listMovies = list;
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements
                 List<ListMovies> list = new ArrayList<>();
                 for (FavoriteMovies item : listFavoriteMovies
                 ) {
-                    list.add(new ListMovies(item.favorite.getId(), item.favorite.getPosterPath()));
+                    list.add(new ListMovies(item.movie.getId(), item.movie.getPosterPath()));
                 }
                 if (!listMovies.equals(list)) {
                     listMovies = list;

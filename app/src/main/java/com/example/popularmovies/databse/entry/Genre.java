@@ -4,7 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.popularmovies.models.Genres;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -12,27 +13,16 @@ import java.io.Serializable;
 public class Genre implements Serializable {
 
     @PrimaryKey
+    @Expose(serialize = false)
     private int id;
 
     private int favoriteId;
 
+    @SerializedName("name")
     private String name;
 
     @Ignore
     public Genre() {
-    }
-
-    @Ignore
-    public Genre(Genres genres, int favoriteId) {
-        this.id = genres.getId();
-        this.favoriteId = favoriteId;
-        this.name = genres.getName();
-    }
-
-    @Ignore
-    public Genre(Genres genres) {
-        this.id = genres.getId();
-        this.name = genres.getName();
     }
 
     public Genre(int id, int favoriteId, String name) {

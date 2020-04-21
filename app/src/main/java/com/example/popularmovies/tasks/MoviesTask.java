@@ -2,8 +2,8 @@ package com.example.popularmovies.tasks;
 
 import android.os.AsyncTask;
 
+import com.example.popularmovies.databse.entry.Movie;
 import com.example.popularmovies.models.DetailsMovie;
-import com.example.popularmovies.models.Movie;
 
 public class MoviesTask extends AsyncTask<Integer, Void, Movie> {
     public interface AsyncMoviesTaskResult {
@@ -26,7 +26,14 @@ public class MoviesTask extends AsyncTask<Integer, Void, Movie> {
 
     @Override
     protected Movie doInBackground(Integer... integers) {
-        return DetailsMovie.getDetailsMovie(integers[0]);
+        int id = integers[0];
+        Movie movie = DetailsMovie.getDetailsMovie(id);
+        if (movie.getGenres() != null && movie.getGenres().size() > 0) {
+            for (int i = 0; i < movie.getGenres().size(); i++) {
+                movie.getGenres().get(i).setFavoriteId(id);
+            }
+        }
+        return movie;
     }
 
 

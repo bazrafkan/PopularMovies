@@ -11,13 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.popularmovies.R;
-import com.example.popularmovies.models.Videos;
+import com.example.popularmovies.databse.entry.Video;
 
 import java.util.List;
 
 public class ListVideosAdapter extends RecyclerView.Adapter<ListVideosAdapter.ItemViewHolder> {
     private static final String TAG = ListVideosAdapter.class.getSimpleName();
-    private List<Videos> listVideos;
+    private List<Video> videos;
     final private ListItemClickListener listener;
 
     @NonNull
@@ -32,13 +32,13 @@ public class ListVideosAdapter extends RecyclerView.Adapter<ListVideosAdapter.It
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        holder.bind(listVideos.get(position).getName());
+        holder.bind(videos.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        if (listVideos != null) {
-            return listVideos.size();
+        if (videos != null) {
+            return videos.size();
         } else {
             return 0;
 
@@ -49,8 +49,8 @@ public class ListVideosAdapter extends RecyclerView.Adapter<ListVideosAdapter.It
         void onListItemClick(int id);
     }
 
-    public ListVideosAdapter(List<Videos> listVideos, ListItemClickListener listener) {
-        this.listVideos = listVideos;
+    public ListVideosAdapter(List<Video> videos, ListItemClickListener listener) {
+        this.videos = videos;
         this.listener = listener;
     }
 

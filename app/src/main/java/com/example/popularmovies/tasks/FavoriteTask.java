@@ -4,15 +4,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.popularmovies.databse.AppDatabase;
-import com.example.popularmovies.databse.entry.Favorite;
+import com.example.popularmovies.databse.entry.Movie;
 
-public class FavoriteTask extends AsyncTask<Favorite, Void, Favorite> {
+public class FavoriteTask extends AsyncTask<Movie, Void, Movie> {
     private Context context;
 
     public interface AsyncListMoviesResult {
         void onPreExecute();
 
-        void onPostExecute(Favorite result);
+        void onPostExecute(Movie result);
     }
 
     public AsyncListMoviesResult delegate;
@@ -29,13 +29,13 @@ public class FavoriteTask extends AsyncTask<Favorite, Void, Favorite> {
     }
 
     @Override
-    protected Favorite doInBackground(Favorite... favorites) {
+    protected Movie doInBackground(Movie... movies) {
         AppDatabase mAppDatabase = AppDatabase.getInstance(context);
-        return mAppDatabase.favoriteDao().getFavorite(favorites[0].getId());
+        return mAppDatabase.favoriteDao().getMovie(movies[0].getId());
     }
 
     @Override
-    protected void onPostExecute(Favorite result) {
+    protected void onPostExecute(Movie result) {
         delegate.onPostExecute(result);
     }
 }

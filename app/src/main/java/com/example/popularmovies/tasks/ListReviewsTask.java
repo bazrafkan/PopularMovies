@@ -2,15 +2,15 @@ package com.example.popularmovies.tasks;
 
 import android.os.AsyncTask;
 
+import com.example.popularmovies.databse.entry.Review;
 import com.example.popularmovies.models.DetailsReviews;
-import com.example.popularmovies.models.Reviews;
 
 import java.util.List;
 
-public class ListReviewsTask extends AsyncTask<Integer,Void, List<Reviews>> {
+public class ListReviewsTask extends AsyncTask<Integer,Void, List<Review>> {
     public interface AsyncReviewTaskResult {
         void onPreExecute();
-        void onPostExecuteListReviews(List<Reviews> result);
+        void onPostExecuteListReviews(List<Review> result);
     }
 
     public AsyncReviewTaskResult delegate;
@@ -26,13 +26,13 @@ public class ListReviewsTask extends AsyncTask<Integer,Void, List<Reviews>> {
     }
 
     @Override
-    protected List<Reviews> doInBackground(Integer... integers) {
+    protected List<Review> doInBackground(Integer... integers) {
         return DetailsReviews.getDetailsReviews(integers[0]);
     }
 
 
     @Override
-    protected void onPostExecute(List<Reviews> videos) {
-        this.delegate.onPostExecuteListReviews(videos);
+    protected void onPostExecute(List<Review> result) {
+        this.delegate.onPostExecuteListReviews(result);
     }
 }

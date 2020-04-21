@@ -37,10 +37,10 @@ public class FavoriteMoviesTask extends AsyncTask<FavoriteMovies, Void, Favorite
     protected FavoriteMovies doInBackground(FavoriteMovies... favoriteMovies) {
         AppDatabase mAppDatabase = AppDatabase.getInstance(context);
         FavoriteMovies item = favoriteMovies[0];
-        int id = item.favorite.getId();
+        int id = item.movie.getId();
         if (action == INSERT_ACTION) {
             mAppDatabase.favoriteMoviesDao().insertFavoriteMovies(
-                    item.favorite,
+                    item.movie,
                     item.genres,
                     item.reviews,
                     item.videos);

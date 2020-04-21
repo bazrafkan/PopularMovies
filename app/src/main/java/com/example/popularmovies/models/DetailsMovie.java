@@ -1,6 +1,7 @@
 package com.example.popularmovies.models;
 
 import com.example.popularmovies.BuildConfig;
+import com.example.popularmovies.databse.entry.Movie;
 import com.example.popularmovies.utils.NetworkUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

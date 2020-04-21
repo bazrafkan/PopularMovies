@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.popularmovies.R;
-import com.example.popularmovies.models.Genres;
+import com.example.popularmovies.databse.entry.Genre;
 import com.google.android.material.chip.Chip;
 
 import java.util.List;
 
-public class ListChipAdapter extends RecyclerView.Adapter<ListChipAdapter.ChipViewHolder> {
+public class ListGenreAdapter extends RecyclerView.Adapter<ListGenreAdapter.ChipViewHolder> {
     private static final String TAG = ListMoviesAdapter.class.getSimpleName();
-    private List<Genres> listGenres;
+    private List<Genre> genres;
 
-    public ListChipAdapter(List<Genres> listGenres) {
-        this.listGenres = listGenres;
+    public ListGenreAdapter(List<Genre> genres) {
+        this.genres = genres;
     }
 
     @NonNull
@@ -29,19 +29,19 @@ public class ListChipAdapter extends RecyclerView.Adapter<ListChipAdapter.ChipVi
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.chip_list_view_item, parent, false);
-        ListChipAdapter.ChipViewHolder chipViewHolder = new ListChipAdapter.ChipViewHolder(view);
+        ListGenreAdapter.ChipViewHolder chipViewHolder = new ListGenreAdapter.ChipViewHolder(view);
         return chipViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ChipViewHolder holder, int position) {
-        holder.bind(listGenres.get(position).getName());
+        holder.bind(genres.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        if (listGenres != null) {
-            return listGenres.size();
+        if (genres != null) {
+            return genres.size();
         } else {
             return 0;
 
