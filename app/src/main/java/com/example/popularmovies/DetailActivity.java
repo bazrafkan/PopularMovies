@@ -106,6 +106,8 @@ public class DetailActivity extends AppCompatActivity implements MoviesTask.Asyn
         if (serializable != null) {
             try {
                 selectedMovie = (FavoriteMovies) serializable;
+                mFavoriteButton.setText(getString(R.string.mark_as_un_favorite));
+                favoritesButtonText = mFavoriteButton.getText().toString();
                 showMovie();
                 showListReviews();
                 showListVideos();
